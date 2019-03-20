@@ -1,0 +1,35 @@
+.text{
+    font-weight: 400;
+    font-style: italic;
+    color: #6a6a6a; 
+}
+.container{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  .question{
+   @extend .text;
+  }
+  .options{
+    height: 21px;
+    
+    display: flex;
+    width: 48px;
+    img{
+      cursor: pointer;
+      width: 17px;
+      margin: 0 4px;
+      &:hover{
+        transform: scale(1.1);
+      }
+      &:active{
+        transform: scale(1.25);
+      }
+      &:nth-child(2){
+        margin-left: 2px;
+        top: 3px;
+        position: relative;
+      }
+    }
+  }
+}

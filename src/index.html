@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+  <title>Stencil Component Starter</title>
+  <script src="/build/inweb.js"></script>
+
+</head>
+
+<body>
+
+  <cc-inweb id="widget-usability" question="How are you today?" token="PC-56874" question-id='5c272306c3d98742b0f7d577'>
+  </cc-inweb>
+  <cc-inweb id="widget-library-usability" token="PC-56874" question-id='5c272306c3d98742b0f7d577'></cc-inweb>
+  <cc-inweb id="follow-up" token="PC-56874" question-id='5c272306c3d98742b0f7d577'></cc-inweb>
+  <script>
+    // Sample usage for a section in a page 
+    var inweb1 = document.querySelector('#widget-usability');
+
+    inweb1.prefills = {
+      '59f0762ed50981ce6442dab4': 'Venki',
+      '5c272306c3d98742b0f7d576': 'Widgets',
+    }
+
+    // Sample usage for another section in the same page 
+    var inweb2 = document.querySelector('#widget-library-usability')
+    inweb2.prefills = {
+      '59f0762ed50981ce6442dab4': 'Venki',
+      '5c272306c3d98742b0f7d576': 'Widget Library',
+    };
+
+    // Sample usage for channel as hook
+    var inWeb3 = document.querySelector('#follow-up');
+    inWeb3.doNotPost = true;
+
+
+    // listens to events and take action like 
+    //  - show follow up on other CC channels like micro-survey/survey/survey-tab
+    //  - redirect to documentation for better understanding
+    //  - trigger chat via Intercom
+    document.addEventListener('cc-inweb-response', function ($event) {
+      console.log($event, 'event')
+    })
+  </script>
+</body>
+
+</html>
