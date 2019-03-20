@@ -7,6 +7,10 @@
   "unpkg": "dist/inweb.js",
   "types": "dist/types/components.d.ts",
   "collection": "dist/collection/collection-manifest.json",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getcloudcherry/cloudcherry-web-nanosurvey.git"
+  },
   "files": [
     "dist/"
   ],
