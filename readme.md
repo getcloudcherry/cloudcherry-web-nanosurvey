@@ -71,3 +71,45 @@ Every interaction to the component will emit an event on submission. Listen for 
  - <b>responseAsAnswer</b> response as an answer format suitable for Cloudcherry CEM platform
 
 
+### Conditional Thank you text
+
+Show different thank you texts based on user's response. Below script sets the property to the already added component.
+
+```
+<script>
+  inweb.conditionalThankYou = {
+    'yes': 'Thank you for your positive feedback',
+    'no': 'Sorry for the inconvinience'
+  }
+</script>
+```
+
+### Hide icons
+
+Not fond of thumbs? you can now show plain text instead of icons. Set the property 'icons' to 'hide'. This can be set in the html as property or set via Javascript
+```
+<script>
+  inweb.icons = 'hide';
+</script>
+```
+
+### Set a different identifier for cookie
+
+You can set different cookie property for the component to use. Set in html using 'cookie-id' attribute or use the property 'cookieId' in JS
+
+```
+<script>
+inweb.cookieId="my-cookie-name";
+</script>
+
+```
+
+### Throttle Survey for varying duration
+
+Surveys are throttled by 3 days by default. You can set the attribute 'throttle-for-days' in html or set in Javascript using 'throttleForDays';
+
+```
+<script>
+  inweb.throttleForDays = 30;
+</script>
+```

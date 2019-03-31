@@ -11,7 +11,8 @@
 
 <body>
 
-  <cc-inweb id="widget-usability" question="How are you today?" token="PC-56874" question-id='5c272306c3d98742b0f7d577'>
+  <cc-inweb id="widget-usability" cookie-id="test1" question="How are you today?" token="PC-56874"
+    question-id='5c272306c3d98742b0f7d577'>
   </cc-inweb>
   <cc-inweb id="widget-library-usability" token="PC-56874" question-id='5c272306c3d98742b0f7d577'></cc-inweb>
   <cc-inweb id="follow-up" token="PC-56874" question-id='5c272306c3d98742b0f7d577'></cc-inweb>
@@ -22,6 +23,12 @@
     inweb1.prefills = {
       '59f0762ed50981ce6442dab4': 'Venki',
       '5c272306c3d98742b0f7d576': 'Widgets',
+    }
+
+    inweb1.icons = 'hide';
+    inweb1.conditionalThankYou = {
+      'yes': 'Thank you for your positive feedback',
+      'no': 'Sorry for the inconvinience'
     }
 
     // Sample usage for another section in the same page 
@@ -44,6 +51,9 @@
       console.log($event, 'event')
     })
   </script>
+
+  <cc-inweb id="follow-up" token="PC-56874" question-id='5c272306c3d98742b0f7d577'></cc-inweb>
+
 </body>
 
 </html>

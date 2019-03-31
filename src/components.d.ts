@@ -13,7 +13,13 @@ import '@stencil/core';
 export namespace Components {
 
   interface CcInweb {
+    'conditionalThankYou': {
+      'yes': string,
+      'no': string
+    };
+    'cookieId': string;
     'doNotPost': boolean;
+    'icons': 'show' | 'hide';
     /**
     * prefills
     */
@@ -23,13 +29,20 @@ export namespace Components {
     * Question-Id to post responses for
     */
     'questionId': string;
+    'throttleForDays': number;
     /**
     * token to submit responses
     */
     'token': string;
   }
   interface CcInwebAttributes extends StencilHTMLAttributes {
+    'conditionalThankYou'?: {
+      'yes': string,
+      'no': string
+    };
+    'cookieId'?: string;
     'doNotPost'?: boolean;
+    'icons'?: 'show' | 'hide';
     'onCc-inweb-response'?: (event: CustomEvent) => void;
     /**
     * prefills
@@ -40,6 +53,7 @@ export namespace Components {
     * Question-Id to post responses for
     */
     'questionId'?: string;
+    'throttleForDays'?: number;
     /**
     * token to submit responses
     */

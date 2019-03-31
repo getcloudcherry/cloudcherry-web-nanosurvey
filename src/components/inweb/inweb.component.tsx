@@ -29,24 +29,34 @@ export class Inweb {
    * token to submit responses
    */
   @Prop() token: string;
-
+  @Prop() throttleForDays = 3;
   /**
    * Question-Id to post responses for
    */
   @Prop() questionId: string;
-
+  @Prop() icons: 'show' | 'hide' = 'show';
   /**
    * prefills
    */
   @Prop() prefills: any;
-
+  @Prop() cookieId: string;
   @Prop() question = 'Was this helpful?';
   @Element() el;
+  @Prop() conditionalThankYou: {
+    'yes': string,
+    'no': string
+  } = {
+      yes: 'Thank you for your response!',
+      no: 'Thank you for your response!'
+    }
+
   @Prop() doNotPost = false;
   @State() responseState: 'init' | 'answered' | 'submitted' = 'init';
   @Event( {
     eventName: 'cc-inweb-response'
   } ) responded: EventEmitter;
+
+  @State() lastAnswer = null;
 
   submit( response: boolean ) {
     let responses = [];
@@ -87,7 +97,7 @@ export class Inweb {
         console.log( response );
         if ( response ) {
           this.responseState = 'submitted';
-          this.createCookie( this.el.id, true, 3 )
+          this.createCookie( this.cookieId || this.el.id, _response.textInput, this.throttleForDays )
         }
       }, ( err ) => {
         console.error( 'Unable to submit response', err );
@@ -118,25 +128,45 @@ export class Inweb {
     return null;
   }
 
+  getOptions() {
+    if ( this.icons === 'hide' ) {
+      return (
+        <div class="options">
+          <span onClick={ () => this.submit( true ) } >Yes</span>
+          <span onClick={ () => this.submit( false ) } >No</span>
+        </div>
+      )
+    } else {
+      return (
+        <div class="options">
+          <img src="../assets/up.svg" onClick={ () => this.submit( true ) } />
+          <img src="../assets/down.svg" onClick={ () => this.submit( false ) } />
+        </div>
+      )
+    }
+  }
+
   render() {
     const survey = <div class="container">
       <div class="question">{ this.question }</div>
-      <div class="options">
-        <img src="../assets/up.svg" onClick={ () => this.submit( true ) } />
-        <img src="../assets/down.svg" onClick={ () => this.submit( false ) } />
-      </div>
+      { this.getOptions() }
     </div>;
-    const thankYouNote = <div class="text">
-      Thank you for your response!
-    </div>;
-    const submitted = <div>
-    </div>
-    const isCookieSet = this.readCookie( this.el.id );
 
-    if ( this.responseState === 'submitted' || isCookieSet ) {
-      return submitted;
-    } else if ( this.responseState === 'answered' ) {
+    const cookieSet = this.readCookie( this.cookieId || this.el.id );
+
+    let thankYouNote = ( <div></div> );
+    if ( cookieSet ) {
+      thankYouNote = <div class="text">
+        { this.conditionalThankYou[ cookieSet.toLowerCase() ] }
+      </div>;
+    }
+
+    const submitted = <div class="text">Saving your response..</div>
+
+    if ( this.responseState === 'submitted' || cookieSet ) {
       return thankYouNote;
+    } else if ( this.responseState === 'answered' ) {
+      return submitted;
     } else {
       return survey;
     }
