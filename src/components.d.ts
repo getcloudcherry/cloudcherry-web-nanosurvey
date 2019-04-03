@@ -13,22 +13,44 @@ import '@stencil/core';
 export namespace Components {
 
   interface CcInweb {
+    /**
+    * Show conditional thank you message based on the response
+    */
     'conditionalThankYou': {
-      'yes': string,
-      'no': string
+      yes: string;
+      no: string;
     };
+    /**
+    * Use Custom key for managing throttling
+    */
     'cookieId': string;
+    /**
+    * Opt out of sending response to server. Handle in event hooks
+    */
     'doNotPost': boolean;
-    'icons': 'show' | 'hide';
+    /**
+    * Optionaly hide the survey after submission
+    */
+    'hideAfterSubmission': boolean;
+    /**
+    * Use icons or text based options
+    */
+    'icons': "show" | "hide";
     /**
     * prefills
     */
     'prefills': any;
+    /**
+    * Question text that will be shown to the user
+    */
     'question': string;
     /**
     * Question-Id to post responses for
     */
     'questionId': string;
+    /**
+    * Configure throttling duration
+    */
     'throttleForDays': number;
     /**
     * token to submit responses
@@ -36,23 +58,45 @@ export namespace Components {
     'token': string;
   }
   interface CcInwebAttributes extends StencilHTMLAttributes {
+    /**
+    * Show conditional thank you message based on the response
+    */
     'conditionalThankYou'?: {
-      'yes': string,
-      'no': string
+      yes: string;
+      no: string;
     };
+    /**
+    * Use Custom key for managing throttling
+    */
     'cookieId'?: string;
+    /**
+    * Opt out of sending response to server. Handle in event hooks
+    */
     'doNotPost'?: boolean;
-    'icons'?: 'show' | 'hide';
+    /**
+    * Optionaly hide the survey after submission
+    */
+    'hideAfterSubmission'?: boolean;
+    /**
+    * Use icons or text based options
+    */
+    'icons'?: "show" | "hide";
     'onCc-inweb-response'?: (event: CustomEvent) => void;
     /**
     * prefills
     */
     'prefills'?: any;
+    /**
+    * Question text that will be shown to the user
+    */
     'question'?: string;
     /**
     * Question-Id to post responses for
     */
     'questionId'?: string;
+    /**
+    * Configure throttling duration
+    */
     'throttleForDays'?: number;
     /**
     * token to submit responses

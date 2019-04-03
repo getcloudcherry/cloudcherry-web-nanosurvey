@@ -12,7 +12,7 @@ export const PLAYGROUNDAPI = 'https://api-playground.getcloudcherry.com/api/surv
 
 export async function sendRequest( token, response ) {
 
-  let url = `${ PLAYGROUNDAPI }${ token }`;
+  let url = `${ API }${ token }`;
 
   let options = {
     method: 'post',

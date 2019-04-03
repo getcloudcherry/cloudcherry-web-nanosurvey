@@ -1,59 +1,102 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"
+    />
+    <title>Stencil Component Starter</title>
+    <script src="/build/inweb.js"></script>
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
-  <title>Stencil Component Starter</title>
-  <script src="/build/inweb.js"></script>
+  <body>
+    <cc-inweb
+      id="widget-usability"
+      cookie-id="test1"
+      question="How are you today?"
+      token="PC-56874"
+      question-id="5c272306c3d98742b0f7d577"
+    >
+    </cc-inweb>
+    <cc-inweb
+      id="widget-library-usability"
+      token="PC-56874"
+      question-id="5c272306c3d98742b0f7d577"
+    ></cc-inweb>
+    <cc-inweb
+      id="follow-up"
+      token="PC-56874"
+      question-id="5c272306c3d98742b0f7d577"
+    ></cc-inweb>
+    <script>
+      // Sample usage for a section in a page
+      var inweb1 = document.querySelector("#widget-usability");
+      var customAttributes = {
+        prefills: {
+          "59f0762ed50981ce6442dab4": "Venki",
+          "5c272306c3d98742b0f7d576": "Widgets"
+        },
+        icons: "hide",
+        conditionalThankYou: {
+          yes: "Thank you for your positive feedback",
+          no: "Sorry for the inconvinience"
+        }
+      };
 
-</head>
+      Object.keys(customAttributes).forEach(key => {
+        inweb1[key] = customAttributes[key];
+      });
 
-<body>
+      // Sample usage for another section in the same page
+      var inweb2 = document.querySelector("#widget-library-usability");
+      inweb2.prefills = {
+        "59f0762ed50981ce6442dab4": "Venki",
+        "5c272306c3d98742b0f7d576": "Widget Library"
+      };
+      inweb2.hideAfterSubmission = true;
+      // Sample usage for channel as hook
+      var inWeb3 = document.querySelector("#follow-up");
+      inWeb3.doNotPost = true;
 
-  <cc-inweb id="widget-usability" cookie-id="test1" question="How are you today?" token="PC-56874"
-    question-id='5c272306c3d98742b0f7d577'>
-  </cc-inweb>
-  <cc-inweb id="widget-library-usability" token="PC-56874" question-id='5c272306c3d98742b0f7d577'></cc-inweb>
-  <cc-inweb id="follow-up" token="PC-56874" question-id='5c272306c3d98742b0f7d577'></cc-inweb>
-  <script>
-    // Sample usage for a section in a page 
-    var inweb1 = document.querySelector('#widget-usability');
-
-    inweb1.prefills = {
-      '59f0762ed50981ce6442dab4': 'Venki',
-      '5c272306c3d98742b0f7d576': 'Widgets',
-    }
-
-    inweb1.icons = 'hide';
-    inweb1.conditionalThankYou = {
-      'yes': 'Thank you for your positive feedback',
-      'no': 'Sorry for the inconvinience'
-    }
-
-    // Sample usage for another section in the same page 
-    var inweb2 = document.querySelector('#widget-library-usability')
-    inweb2.prefills = {
-      '59f0762ed50981ce6442dab4': 'Venki',
-      '5c272306c3d98742b0f7d576': 'Widget Library',
-    };
-
-    // Sample usage for channel as hook
-    var inWeb3 = document.querySelector('#follow-up');
-    inWeb3.doNotPost = true;
-
-
-    // listens to events and take action like 
-    //  - show follow up on other CC channels like micro-survey/survey/survey-tab
-    //  - redirect to documentation for better understanding
-    //  - trigger chat via Intercom
-    document.addEventListener('cc-inweb-response', function ($event) {
-      console.log($event, 'event')
-    })
-  </script>
-
-  <cc-inweb id="follow-up" token="PC-56874" question-id='5c272306c3d98742b0f7d577'></cc-inweb>
-
-</body>
-
+      // listens to events and take action like
+      //  - show follow up on other CC channels like micro-survey/survey/survey-tab
+      //  - redirect to documentation for better understanding
+      //  - trigger chat via Intercom
+      document.addEventListener("cc-inweb-response", function($event) {
+        console.log($event, "event");
+      });
+    </script>
+    <cc-inweb
+      id="follow-up"
+      token="PC-56874"
+      question-id="5c272306c3d98742b0f7d577"
+    ></cc-inweb>
+    <div id="test-id" style="margin:20px;padding:20px;">
+      Wikipedia (/ˌwɪkɪˈpiːdiə/ (About this soundlisten), /ˌwɪkiˈpiːdiə/ (About
+      this soundlisten) WIK-ih-PEE-dee-ə) is a multilingual online encyclopedia
+      with exclusively free content, based on open collaboration through a model
+      of content edit by web-based applications like web browsers, called wiki.
+      It is the largest and most popular general reference work on the World
+      Wide Web,[3][4][5] and is one of the most popular websites by Alexa rank
+      as of October 2018.[6] It is owned and supported by the Wikimedia
+      Foundation, a non-profit organization that operates on money it receives
+      from donors.[7][8][9] Wikipedia was launched on January 15, 2001, by Jimmy
+      Wales and Larry Sanger.[10] Sanger coined its name,[11][12] as a
+      portmanteau of wiki (the Hawai'ian word for "quick"[13]) and
+      "encyclopedia". Initially an English-language encyclopedia, versions in
+      other languages were quickly developed. With 5,836,278 articles,[notes 3]
+      the English Wikipedia is the largest of the more than 290 Wikipedia
+      encyclopedias. Overall, Wikipedia comprises more than 40 million articles
+      in 301 different languages[14] and by February 2014 it had reached 18
+      billion page views and nearly 500 million unique visitors per month.[15]
+    </div>
+    <script>
+      let feedback = document.createElement("cc-inweb");
+      feedback.id = "temp-id";
+      feedback.token = "pc-56874";
+      feedback["question-id"] = "5c272306c3d98742b0f7d577";
+      document.getElementById("test-id").appendChild(feedback);
+    </script>
+  </body>
 </html>

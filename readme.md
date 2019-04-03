@@ -10,17 +10,19 @@ To start using this channel within your web application, follow one of below met
 
 ### Script Tag
 
-- Put a script tag similar to this ```<script src='https://unpkg.com/inweb-survey@0.0.2/dist/inweb.js'></script>``` in the head of your index.html
+- Put a script tag similar to this `<script src='https://unpkg.com/inweb-survey@0.0.2/dist/inweb.js'></script>` in the head of your index.html
 - Then you can use the element anywhere in your template, JSX, html etc.
 
 ### Node Modules
-- ```npm install inweb-survey```  
+
+- `npm install inweb-survey`
 - Put a script tag similar to this <script src='node_modules/inweb-survey/dist/inweb.js'></script> in the head of your index.html
 - Then you can use the element anywhere in your template, JSX, html etc.
 
 ### In a stencil-app-starter app
-- Run ```npm install inweb-survey --save```
-- Add an import to the npm packages: ```import inweb;```
+
+- Run `npm install inweb-survey --save`
+- Add an import to the npm packages: `import inweb;`
 - Then you can use the element anywhere in your template, JSX, html etc.
 
 ## Using this component
@@ -29,16 +31,18 @@ To start using this channel within your web application, follow one of below met
 <cc-inweb id="widget-usability" question="How are you today?" token="PC-56874" question-id='5c272306c3d98742b0f7d577'>
 </cc-inweb>
 ```
+
 - <b>question</b> will be shown to user with thumbs up and down
 - <b>token</b> - survey token from CloudCherry CEM platform
-- <b>question-id</b> - id of the question from CloudCherry CEM platform 
+- <b>question-id</b> - id of the question from CloudCherry CEM platform
 
 ### Prefill user information
 
 Below the html tag, add the following code in a script tag
+
 ```
 <script>
-    // Sample usage for a section in a page 
+    // Sample usage for a section in a page
     var inweb = document.querySelector('#widget-usability');
 
     inweb.prefills = {
@@ -47,6 +51,7 @@ Below the html tag, add the following code in a script tag
     }
 </script>
 ```
+
 - <b>prefills</b> is a dictionary with keys as question ids from CloudCherry CEM Platform and values are the prefill answers
 - These prefills will be submitted along with users response.
 
@@ -65,11 +70,11 @@ Every interaction to the component will emit an event on submission. Listen for 
 ```
 
 `$event.detail` has the following payload
- - <b>question</b> has the current question shown to us
- - <b>response</b> is the user's choice of the answer. It would be 'true' or 'false' 
- - <b>prefills</b> prefills that was submitted along with response
- - <b>responseAsAnswer</b> response as an answer format suitable for Cloudcherry CEM platform
 
+- <b>question</b> has the current question shown to us
+- <b>response</b> is the user's choice of the answer. It would be 'true' or 'false'
+- <b>prefills</b> prefills that was submitted along with response
+- <b>responseAsAnswer</b> response as an answer format suitable for Cloudcherry CEM platform
 
 ### Conditional Thank you text
 
@@ -87,6 +92,7 @@ Show different thank you texts based on user's response. Below script sets the p
 ### Hide icons
 
 Not fond of thumbs? you can now show plain text instead of icons. Set the property 'icons' to 'hide'. This can be set in the html as property or set via Javascript
+
 ```
 <script>
   inweb.icons = 'hide';
@@ -111,5 +117,15 @@ Surveys are throttled by 3 days by default. You can set the attribute 'throttle-
 ```
 <script>
   inweb.throttleForDays = 30;
+</script>
+```
+
+### Hide after submission
+
+While throttling, you can choose to show the survey or hide it.
+
+```
+<script>
+  inweb.hideAfterSubmission = true;
 </script>
 ```
