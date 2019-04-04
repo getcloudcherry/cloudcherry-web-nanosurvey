@@ -24,6 +24,7 @@ export namespace Components {
     * Use Custom key for managing throttling
     */
     'cookieId': string;
+    'customStyle': any;
     /**
     * Opt out of sending response to server. Handle in event hooks
     */
@@ -69,6 +70,7 @@ export namespace Components {
     * Use Custom key for managing throttling
     */
     'cookieId'?: string;
+    'customStyle'?: any;
     /**
     * Opt out of sending response to server. Handle in event hooks
     */

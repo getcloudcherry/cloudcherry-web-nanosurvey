@@ -10,7 +10,7 @@ To start using this channel within your web application, follow one of below met
 
 ### Script Tag
 
-- Put a script tag similar to this `<script src='https://unpkg.com/inweb-survey@0.0.2/dist/inweb.js'></script>` in the head of your index.html
+- Put a script tag similar to this `<script src='https://unpkg.com/inweb-survey@0.2.0/dist/inweb.js'></script>` in the head of your index.html
 - Then you can use the element anywhere in your template, JSX, html etc.
 
 ### Node Modules
@@ -43,9 +43,11 @@ Below the html tag, add the following code in a script tag
 ```
 <script>
     // Sample usage for a section in a page
-    var inweb = document.querySelector('#widget-usability');
+    // Avoid using inweb as variable name,it overwrites the global sdk
 
-    inweb.prefills = {
+    var _inweb = document.querySelector('#widget-usability');
+
+    _inweb.prefills = {
       '59f0762ed50981ce6442dab4': 'Venki',
       '5c272306c3d98742b0f7d576': 'Widgets',
     }
@@ -82,7 +84,7 @@ Show different thank you texts based on user's response. Below script sets the p
 
 ```
 <script>
-  inweb.conditionalThankYou = {
+  _inweb.conditionalThankYou = {
     'yes': 'Thank you for your positive feedback',
     'no': 'Sorry for the inconvinience'
   }
@@ -95,7 +97,7 @@ Not fond of thumbs? you can now show plain text instead of icons. Set the proper
 
 ```
 <script>
-  inweb.icons = 'hide';
+  _inweb.icons = 'hide';
 </script>
 ```
 
@@ -105,7 +107,7 @@ You can set different cookie property for the component to use. Set in html usin
 
 ```
 <script>
-inweb.cookieId="my-cookie-name";
+  _inweb.cookieId="my-cookie-name";
 </script>
 
 ```
@@ -116,7 +118,7 @@ Surveys are throttled by 3 days by default. You can set the attribute 'throttle-
 
 ```
 <script>
-  inweb.throttleForDays = 30;
+  _inweb.throttleForDays = 30;
 </script>
 ```
 
@@ -126,6 +128,37 @@ While throttling, you can choose to show the survey or hide it.
 
 ```
 <script>
-  inweb.hideAfterSubmission = true;
+  _inweb.hideAfterSubmission = true;
 </script>
+```
+
+## Customize the component for your brand
+
+Use css variables to set custom styles to the component
+
+| Variable name            | Functionality           | Default                        |
+| ------------------------ | :---------------------- | ------------------------------ |
+| `--cc-inweb-color`       | Text color              | #6a6a6a                        |
+| `--cc-inweb-font-weight` | Font Weight             | 400                            |
+| `--cc-inweb-font-size`   | Font Size               | 15px                           |
+| `--cc-inweb-font-style`  | Font Style for text     | italic                         |
+| `--cc-inweb-yes-color`   | Color for Yes icon/text | `--cc-inweb-color` or #6a6a6a  |
+| `--cc-inweb-no-color`    | Color for No icon/text  | `--cc-inweb-color` or #6a6a6a  |
+| `--cc-inweb-icon-size`   | Size of icons           | `--cc-inweb-font-size` or 15px |
+
+### Usage
+
+Set style across the web page
+
+```
+<body style="--cc-inweb-color:blue">
+</body>
+```
+
+Set style for one widget
+
+```
+<cc-inweb style="--cc-inweb-color: blue"></cc-inweb>
+
+<cc-inweb style="--cc-inweb-color: red"></cc-inweb>
 ```

@@ -1,48 +1,71 @@
-.text{
-    font-weight: 400;
-    font-style: italic;
-    color: #6a6a6a; 
+.text {
+  font-weight: var(--cc-inweb-font-weight, 400);
+  font-size: var(--cc-inweb-font-size, 15px);
+  font-style: var(--cc-inweb-font-style, italic);
+  color: var(--cc-inweb-color, #6a6a6a);
 }
-.container{
+.container {
   width: 100%;
   display: flex;
   align-items: center;
-  .question{
-   @extend .text;
+  .question {
+    @extend .text;
   }
-  .options{
+  .options {
     height: 21px;
-    
+
     display: flex;
     width: 48px;
-    span{
-      &:hover{
+    span {
+      &.yes {
+        color: var(--cc-inweb-yes-color, var(--cc-inweb-color, #6a6a6a));
+      }
+      &.no {
+        color: var(--cc-inweb-no-color, var(--cc-inweb-color, #6a6a6a));
+      }
+
+      &:hover {
         transform: scale(1.1);
       }
-      &:active{
+      &:active {
         transform: scale(1.25);
       }
-      &:first-child{
+      &:first-child {
         margin-right: 8px;
         margin-left: 4px;
       }
       text-decoration: underline;
       cursor: pointer;
     }
-    img{
+    .up,
+    .down {
+      svg {
+        height: var(--cc-inweb-icon-size, var(--cc-inweb-font-size, 15px));
+        width: var(--cc-inweb-icon-size, var(--cc-inweb-font-size, 15px));
+      }
       cursor: pointer;
       width: 17px;
-      margin: 0 4px;
-      &:hover{
+      margin: 0 6px;
+      &:hover {
         transform: scale(1.1);
       }
-      &:active{
+      &:active {
         transform: scale(1.25);
       }
-      &:nth-child(2){
+      &:nth-child(2) {
         margin-left: 2px;
         top: 3px;
         position: relative;
+      }
+    }
+    .up {
+      path {
+        fill: var(--cc-inweb-yes-color, var(--cc-inweb-color, #6a6a6a));
+      }
+    }
+    .down {
+      path {
+        fill: var(--cc-inweb-no-color, var(--cc-inweb-color, #6a6a6a));
       }
     }
   }
