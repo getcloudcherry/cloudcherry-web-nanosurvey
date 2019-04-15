@@ -195,6 +195,31 @@ export class Inweb {
     }
   }
 
+  dropdownFunction() {
+    if(this.currentAnswer === "Yes") {
+      console.log("YES");
+      return (
+        <select>
+          <option>{this.getUpSvg()}</option>
+          <option>Option 1</option>
+          <option>Option 2</option>
+          <option>Option 3</option>
+        </select>
+      );
+    }
+    else if(this.currentAnswer === "No") {
+      console.log("NO");
+      return (
+        <select>
+          <option>{this.getUpSvg()}</option>
+          <option>Option 4</option>
+          <option>Option 5</option>
+          <option>Option 6</option>
+        </select>
+      );
+    }
+  }
+  
   getDownSvg() {
     return (
       <svg width="45px" height="45px" viewBox="0 0 45 45" version="1.1">
