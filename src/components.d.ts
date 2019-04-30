@@ -14,21 +14,32 @@ export namespace Components {
 
   interface CcInweb {
     /**
-    * Show conditional thank you message based on the response
+    * Show conditional thank you message based on the response works only for Yes/No question
     */
     'conditionalThankYou': {
       yes: string;
       no: string;
     };
     /**
+    * Callbacks that will evaluate a condition for thank you text
+    */
+    'conditionalThankYouTextCallBack': any;
+    /**
     * Use Custom key for managing throttling
     */
     'cookieId': string;
-    'customStyle': any;
     /**
     * Opt out of sending response to server. Handle in event hooks
     */
     'doNotPost': boolean;
+    /**
+    * Question id for follow up response
+    */
+    'followUpQuestionId': any;
+    /**
+    * Dictionary of followUp options to be asked
+    */
+    'followUpQuestions': any;
     /**
     * Optionaly hide the survey after submission
     */
@@ -49,6 +60,7 @@ export namespace Components {
     * Question-Id to post responses for
     */
     'questionId': string;
+    'surveySettings': any;
     /**
     * Configure throttling duration
     */
@@ -57,24 +69,39 @@ export namespace Components {
     * token to submit responses
     */
     'token': string;
+    /**
+    * Force the component to get token settings from server. It will use the first valid question to show.
+    */
+    'useToken': boolean;
   }
   interface CcInwebAttributes extends StencilHTMLAttributes {
     /**
-    * Show conditional thank you message based on the response
+    * Show conditional thank you message based on the response works only for Yes/No question
     */
     'conditionalThankYou'?: {
       yes: string;
       no: string;
     };
     /**
+    * Callbacks that will evaluate a condition for thank you text
+    */
+    'conditionalThankYouTextCallBack'?: any;
+    /**
     * Use Custom key for managing throttling
     */
     'cookieId'?: string;
-    'customStyle'?: any;
     /**
     * Opt out of sending response to server. Handle in event hooks
     */
     'doNotPost'?: boolean;
+    /**
+    * Question id for follow up response
+    */
+    'followUpQuestionId'?: any;
+    /**
+    * Dictionary of followUp options to be asked
+    */
+    'followUpQuestions'?: any;
     /**
     * Optionaly hide the survey after submission
     */
@@ -96,6 +123,7 @@ export namespace Components {
     * Question-Id to post responses for
     */
     'questionId'?: string;
+    'surveySettings'?: any;
     /**
     * Configure throttling duration
     */
@@ -104,6 +132,10 @@ export namespace Components {
     * token to submit responses
     */
     'token'?: string;
+    /**
+    * Force the component to get token settings from server. It will use the first valid question to show.
+    */
+    'useToken'?: boolean;
   }
 }
 

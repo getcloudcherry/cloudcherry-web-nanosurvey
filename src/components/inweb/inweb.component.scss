@@ -7,34 +7,135 @@
 .container {
   width: 100%;
   display: flex;
+  height: 48px;
   align-items: center;
   .question {
     @extend .text;
   }
-  .options {
+
+  .smile-container,
+  .star-container {
+    margin-bottom: 2px;
     height: 21px;
-
+    margin-left: 4px;
     display: flex;
-    width: 48px;
-    span {
-      &.yes {
-        color: var(--cc-inweb-yes-color, var(--cc-inweb-color, #6a6a6a));
-      }
-      &.no {
-        color: var(--cc-inweb-no-color, var(--cc-inweb-color, #6a6a6a));
-      }
-
+    width: 124px;
+    align-items: center;
+    justify-content: space-between;
+    img {
+      cursor: pointer;
+      height: 100%;
       &:hover {
-        transform: scale(1.1);
+        transform: scle(1.1);
       }
       &:active {
         transform: scale(1.25);
       }
+    }
+  }
+  .menu {
+    position: absolute;
+    background: #ffffff;
+    max-width: 260px;
+    min-width: 200px;
+    max-height: 400px;
+    overflow: auto;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    .menu-item {
+      min-height: 24px;
+      padding: 10px;
+      cursor: pointer;
+      &:hover {
+        background-color: #f2f2f2;
+      }
+      &.question-text {
+        font-weight: bold;
+        cursor: default;
+        border-bottom: 1px solid #e7e7e7;
+      }
+    }
+  }
+  .select-container {
+    margin-bottom: 2px;
+    margin-left: 4px;
+    select {
+      border-width: 0px 0px 1px 0px;
+      margin-left: 4px;
+      border-style: solid;
+      outline: none;
+      width: 124px;
+      cursor: pointer;
+      option {
+        cursor: pointer;
+      }
+    }
+  }
+  .cc-overlay {
+    width: 100vw;
+    height: 100vh;
+    z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+  .options {
+    height: 21px;
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    width: 48px;
+    span {
+      height: 20px;
+      --cc-inweb-yes-background: blue;
+      --cc-inweb-no-background: blue;
+      padding: 3px 12px;
+      border-radius: 20px;
+      &.yes {
+        color: var(--cc-inweb-yes-color, var(--cc-inweb-color, #6a6a6a));
+        border: 1px solid
+          var(--cc-inweb-yes-color, var(--cc-inweb-color, #6a6a6a));
+        &:hover {
+          @if var(--cc-inweb-yes-color, var(--cc-inweb-color, #ffffff)) ==
+            #ffffff
+          {
+          } @else {
+            color: #ffffff;
+          }
+          background-color: var(
+            --cc-inweb-yes-color,
+            var(--cc-inweb-color, #6a6a6a)
+          );
+        }
+      }
+      &.no {
+        color: var(--cc-inweb-no-color, var(--cc-inweb-color, #6a6a6a));
+        border: 1px solid
+          var(--cc-inweb-no-color, var(--cc-inweb-color, #6a6a6a));
+        &:hover {
+          @if var(--cc-inweb-no-color, var(--cc-inweb-color, #ffffff)) ==
+            #ffffff
+          {
+          } @else {
+            color: #ffffff;
+          }
+          background-color: var(
+            --cc-inweb-no-color,
+            var(--cc-inweb-color, #6a6a6a)
+          );
+        }
+      }
+
+      // &:hover {
+      //   transform: scale(1.1);
+      // }
+      // &:active {
+      //   transform: scale(1.25);
+      // }
       &:first-child {
         margin-right: 8px;
         margin-left: 4px;
       }
-      text-decoration: underline;
       cursor: pointer;
     }
     .up,

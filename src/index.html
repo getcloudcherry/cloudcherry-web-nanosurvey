@@ -15,10 +15,10 @@
     <cc-inweb
       id="widget-usability"
       cookie-id="test1"
-      question="How are you today?"
+      question="How are you feeling today?"
       token="PC-56874"
       question-id="5c272306c3d98742b0f7d577"
-      style="--cc-inweb-color:red;--cc-inweb-font-style:normal;--cc-inweb-font-weight: bold"
+      style="--cc-inweb-color:#e75421;--cc-inweb-font-style:normal;--cc-inweb-font-weight: bold"
     ></cc-inweb>
     <cc-inweb
       id="widget-library-usability"
@@ -96,8 +96,27 @@
       let feedback = document.createElement("cc-inweb");
       feedback.id = "temp-id";
       feedback.token = "pc-56874";
-      feedback["question-id"] = "5c272306c3d98742b0f7d577";
+      feedback["questionId"] = "5c272306c3d98742b0f7d577";
+      feedback.followUpQuestions = {
+        Yes: ["Content", "Right to the point!"],
+        No: ["Lengthy", "Does not makes sense"]
+      };
+      feedback.icons = "hide";
+      feedback.followUpQuestionId = "5c272306c3d98742b0f7d577";
       document.getElementById("test-id").appendChild(feedback);
+    </script>
+
+    <div>
+      Star Rating questions
+      <cc-inweb id="test-star" use-token="true" token="MR-13286"></cc-inweb>
+    </div>
+    <script>
+      let star = document.getElementById("test-star");
+      star.followUpQuestions = {
+        Yes: ["Content", "Right to the point!"],
+        No: ["Lengthy", "Does not makes sense"],
+        "Option A": ["Lengthy", "Does not makes sense"]
+      };
     </script>
   </body>
 </html>

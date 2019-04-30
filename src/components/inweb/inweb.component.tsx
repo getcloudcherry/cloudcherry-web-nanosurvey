@@ -6,7 +6,39 @@ import {
   State,
   Element
 } from "@stencil/core";
-import { sendRequest } from "../../utils/utils";
+import {
+  sendPostRequest,
+  sendGetRequest,
+  postPartial
+} from "../../utils/utils";
+import { Settings } from "../../types/settings";
+import { SurveyResponse, Question } from "../../types/state";
+import { Condition } from "../../types/question";
+const SUPPORTED_QUESTIONS = ["Star-5", "Smile-5", "Select"];
+const IMAGE_URL = "https://cx.getcloudcherry.com/survey-assets/v1/";
+
+const IMAGE_NAMES = {
+  "Star-5": {
+    star: "star.svg",
+    star_on: "star_on.svg"
+  },
+  "Smile-5": {
+    smile: [
+      "extremelyunhappy.svg",
+      "unhappy.svg",
+      "neutral.svg",
+      "happy.svg",
+      "extremelyhappy.svg"
+    ],
+    smile_on: [
+      "extremelyunhappy_on.svg",
+      "unhappy_on.svg",
+      "neutral_on.svg",
+      "happy_on.svg",
+      "extremelyhappy_on.svg"
+    ]
+  }
+};
 
 /**
  *
@@ -65,9 +97,18 @@ export class Inweb {
    */
   @Prop() question = "Was this helpful?";
 
+  /**
+   * Question id for follow up response
+   */
+  @Prop() set followUpQuestionId(value) {
+    this._followUpQuestionId = value;
+  }
+
+  _followUpQuestionId;
   @Element() el;
   /**
    * Show conditional thank you message based on the response
+   * works only for Yes/No question
    */
   @Prop() conditionalThankYou: {
     yes: string;
@@ -76,32 +117,165 @@ export class Inweb {
     yes: "Thank you for your response!",
     no: "Thank you for your response!"
   };
+
+  /**
+   * Callbacks that will evaluate a condition for thank you text
+   */
+  @Prop() conditionalThankYouTextCallBack: any;
   /**
    * Opt out of sending response to server. Handle in event hooks
    */
   @Prop() doNotPost = false;
-  @Prop() customStyle;
 
+  /**
+   * responseState
+   *
+   * init - showing the channel
+   * answered -
+   */
   @State() responseState: "init" | "answered" | "submitted" = "init";
+
+  /**
+   * Dictionary of followUp options to be asked
+   */
+  @Prop({ mutable: true }) followUpQuestions: any;
+
   @Event({
     eventName: "cc-inweb-response"
   })
   responded: EventEmitter;
+
+  /**
+   * Force the component to get token settings from server.
+   * It will use the first valid question to show.
+   *
+   */
+  @Prop()
+  useToken = false;
+
+  @State() followUpOptions: Array<string> = null;
+  @State() _surveySettings: Settings;
+  firstQuestion: Question;
   answeredNow = false;
-  currentAnswer: "Yes" | "No";
+  currentAnswer: number | string;
+  temporaryAnswer: any;
+  @State() ratingHovered = null;
+  @Prop() set surveySettings(settings: Settings) {
+    this._surveySettings = settings;
+  }
 
   @State() lastAnswer = null;
 
-  submit(response: boolean) {
+  componentWillLoad() {
+    const cookieSet = this.readCookie(this.cookieId || this.el.id);
+    if (this.useToken && this.token && !cookieSet) {
+      sendGetRequest(this.token)
+        .then(x => x.json())
+        .then((response: Settings) => {
+          if (response) {
+            this._surveySettings = response;
+            this.setFirstValidQuestion();
+          } else {
+            // do not show the question
+          }
+        });
+    }
+  }
+
+  setFirstValidQuestion() {
+    let validQuestions = this._surveySettings.questions
+      .filter(x => !x.apiFill && !x.staffFill)
+      .filter(x => SUPPORTED_QUESTIONS.indexOf(x.displayType) !== -1)
+      .sort((a, b) => {
+        return a.sequence - b.sequence;
+      });
+    this.firstQuestion = validQuestions[0];
+    let followUpQuestions = validQuestions.filter(
+      x =>
+        x.id !== this.firstQuestion.id &&
+        x.displayType === "Select" &&
+        x.questionTags &&
+        x.questionTags.indexOf("follow-up") !== -1
+    );
+    if (followUpQuestions) {
+      this.followUpQuestions = {};
+      followUpQuestions.forEach(x => {
+        if (
+          x &&
+          x.conditionalFilter &&
+          x.conditionalFilter.filterquestions &&
+          x.conditionalFilter.filterquestions.length > 0
+        ) {
+          this.getTriggerValues(x.conditionalFilter.filterquestions).forEach(
+            y => {
+              this.followUpQuestions[y] = x;
+            }
+          );
+        } else {
+          this.followUpQuestions["default"] = x;
+        }
+      });
+    }
+  }
+
+  getTriggerValues(filters: Condition[]) {
+    let x = filters[0];
+    let startRange = parseInt(
+      this.firstQuestion.multiSelect[0].split("-")[0],
+      10
+    );
+    let endRange = parseInt(
+      this.firstQuestion.multiSelect[0].split("-")[1],
+      10
+    );
+    if (!x) {
+      if (this.isNumberType(this.firstQuestion)) {
+        return this.getRange(startRange, endRange);
+      }
+    }
+    if (x.questionId === this.firstQuestion.id) {
+      if (this.isNumberType(this.firstQuestion)) {
+        if (x.answerCheck[0] === "eq") {
+          return [x.number];
+        } else if (x.answerCheck[0] === "lt") {
+          return this.getRange(startRange, x.number);
+        } else if (x.answerCheck[0] === "gt") {
+          return this.getRange(x.number, endRange);
+        }
+      } else {
+        return x.answerCheck;
+      }
+    }
+  }
+
+  getRange(start, end) {
+    let result = [];
+    for (let i = start; i <= end; i++) {
+      result.push(i);
+    }
+    return result;
+  }
+
+  submit(response: number | string, followUpAnswer?: string) {
     this.answeredNow = true;
-    this.currentAnswer = response ? "Yes" : "No";
+    this.currentAnswer = response;
     let responses = [];
-    let _response = {
-      questionId: this.questionId,
-      questionText: this.question,
-      textInput: response ? "Yes" : "No",
-      numberInput: null
-    };
+    let _response = this.compileResponse(response);
+    let followUpResponse;
+    console.log(
+      this.followUpQuestions && this.followUpQuestions[response],
+      "question found"
+    );
+
+    if (
+      followUpAnswer &&
+      (this.followUpQuestionId ||
+        (this.followUpQuestions &&
+          (this.followUpQuestions[response] ||
+            this.followUpQuestions["default"])))
+    ) {
+      followUpResponse = this.compileFollowupResponse(response, followUpAnswer);
+    }
     let prefills = [];
     if (this.prefills) {
       Object.keys(this.prefills).forEach(x => {
@@ -117,8 +291,13 @@ export class Inweb {
     }
     responses.push(...prefills, _response);
 
+    if (followUpResponse) {
+      responses.push(followUpResponse);
+    }
+
     let payload = {
       surveyClient: "Inweb",
+      responseDateTime: new Date(),
       responses
     };
 
@@ -131,14 +310,19 @@ export class Inweb {
 
     if (this.token && !this.doNotPost) {
       this.responseState = "answered";
-      sendRequest(this.token, payload).then(
-        response => {
-          console.log(response);
-          if (response) {
+      // flush partial
+      if (this._surveySettings && this._surveySettings.partialResponseId) {
+        let flush = true;
+        postPartial(this._surveySettings.partialResponseId, _response, flush);
+      }
+      sendPostRequest(this.token, payload).then(
+        submittedResponse => {
+          console.log(submittedResponse);
+          if (submittedResponse) {
             this.responseState = "submitted";
             this.createCookie(
               this.cookieId || this.el.id,
-              _response.textInput,
+              response,
               this.throttleForDays
             );
           }
@@ -149,6 +333,57 @@ export class Inweb {
         }
       );
     }
+  }
+
+  compileFollowupResponse(firstResponse, followUpResponse): SurveyResponse {
+    let questionId;
+    if (this.followUpQuestionId) {
+      questionId = this.followUpQuestionId;
+    } else if (this.followUpQuestions[firstResponse]) {
+      questionId = this.followUpQuestions[firstResponse].id;
+    } else if (this.followUpQuestions["default"]) {
+      questionId = this.followUpQuestions["default"].id;
+    }
+
+    if (questionId) {
+      return {
+        questionId,
+        questionText: "Followup question",
+        textInput: followUpResponse,
+        numberInput: null
+      };
+    }
+  }
+
+  isNumberType(type) {
+    if (["Scale", "Smile-5", "Star-5"].indexOf(type) !== -1) {
+      return true;
+    }
+  }
+
+  /**
+   * Creates a response object as per the question type
+   *
+   * @param response {boolean | number} primary response
+   *
+   *
+   */
+  compileResponse(response): SurveyResponse {
+    if (this.useToken && this._surveySettings) {
+      let isNumberType = this.isNumberType(this.firstQuestion.displayType);
+      return {
+        questionId: this.firstQuestion.id,
+        questionText: this.firstQuestion.text,
+        textInput: !isNumberType ? response : null,
+        numberInput: isNumberType ? response : null
+      };
+    }
+    return {
+      questionId: this.questionId,
+      questionText: this.question,
+      textInput: response ? "Yes" : "No",
+      numberInput: null
+    };
   }
 
   createCookie(name, value, days) {
@@ -171,14 +406,132 @@ export class Inweb {
     return null;
   }
 
+  getStars(question: Question, selected?: number) {
+    let displayLegend = [];
+    if (question && question.displayLegend) {
+      displayLegend = question.displayLegend;
+    }
+    return (
+      <div class="star-container">
+        {[1, 2, 3, 4, 5].map(i => {
+          let imgUrl = `${IMAGE_URL}${IMAGE_NAMES["Star-5"].star}`;
+          if (i <= selected) {
+            imgUrl = `${IMAGE_URL}${IMAGE_NAMES["Star-5"].star_on}`;
+          }
+
+          let title = this.getLegendAsTitle(i, displayLegend);
+
+          return (
+            <img
+              class="star"
+              src={imgUrl}
+              onClick={() => this.validateAndSubmit(i)}
+              title={title}
+              onMouseOver={() => this.reRenderForRating(i)}
+              onMouseOut={() => this.reRenderForRating(null)}
+            />
+          );
+        })}
+      </div>
+    );
+  }
+
+  reRenderForRating(hovered) {
+    this.ratingHovered = hovered;
+    this.render();
+    return null;
+  }
+
+  getSmiles(question: Question, selected?: number) {
+    let displayLegend = [];
+    if (question && question.displayLegend) {
+      displayLegend = question.displayLegend;
+    }
+
+    return (
+      <div class="smile-container">
+        {[1, 2, 3, 4, 5].map(i => {
+          let imgUrl;
+          if (i === selected) {
+            imgUrl = `${IMAGE_URL}${IMAGE_NAMES["Smile-5"].smile_on[i - 1]}`;
+          } else {
+            imgUrl = `${IMAGE_URL}${IMAGE_NAMES["Smile-5"].smile[i - 1]}`;
+          }
+
+          let title = this.getLegendAsTitle(i, displayLegend);
+
+          return (
+            <img
+              class="smile"
+              src={imgUrl}
+              onClick={() => this.validateAndSubmit(i)}
+              title={title}
+              onMouseOver={() => this.reRenderForRating(i)}
+              onMouseOut={() => this.reRenderForRating(null)}
+            />
+          );
+        })}
+      </div>
+    );
+  }
+
+  getLegendAsTitle(i, displayLegend) {
+    let title;
+    if (i === 1 && displayLegend[0]) {
+      title = displayLegend[0];
+    } else if (i === 5 && displayLegend[1]) {
+      title = displayLegend[1];
+    }
+
+    return title;
+  }
+
+  getSelectOptions(question: Question) {
+    if (!question || !question.multiSelect) {
+      return <div />;
+    }
+    return (
+      <div class="select-container">
+        <select onInput={event => this.submitSelect(event)}>
+          <option value="null">Select a value</option>
+          {question.multiSelect.map(x => {
+            let y = x.split(";")[0];
+            return <option value={y}>{y}</option>;
+          })}
+        </select>
+      </div>
+    );
+  }
+
+  submitSelect(event) {
+    // console.log(event.target.value);
+    this.validateAndSubmit(event.target.value);
+  }
+
+  getOptionsFor(question: Question) {
+    if (question.displayType === "Star-5") {
+      return this.getStars(
+        question,
+        this.ratingHovered || this.temporaryAnswer
+      );
+    } else if (question.displayType === "Smile-5") {
+      return this.getSmiles(
+        question,
+        this.ratingHovered || this.temporaryAnswer
+      );
+    } else if (question.displayType === "Select") {
+      return this.getSelectOptions(question);
+    }
+  }
+
   getOptions() {
     if (this.icons === "hide") {
       return (
         <div class="options">
-          <span class="yes" onClick={() => this.submit(true)}>
+          <span class="yes" onClick={() => this.validateAndSubmit("Yes")}>
             Yes
           </span>
-          <span class="no" onClick={() => this.submit(false)}>
+          <span class="no" onClick={() => this.validateAndSubmit("No")}>
             No
           </span>
         </div>
@@ -186,12 +539,43 @@ export class Inweb {
     } else {
       return (
         <div class="options">
-          <div class="up" onClick={() => this.submit(true)}>
+          <div class="up" onClick={() => this.validateAndSubmit("Yes")}>
             {this.getUpSvg()}
           </div>
-          <div class="down">{this.getDownSvg()}</div>
+          <div class="down" onClick={() => this.validateAndSubmit("No")}>
+            {this.getDownSvg()}
+          </div>
         </div>
       );
+    }
+  }
+
+  /**
+   * Checks for followUp questions
+   *
+   * @param value {string | number} response collected
+   */
+  validateAndSubmit(value) {
+    if (
+      this.followUpQuestions &&
+      this.followUpQuestions[value] &&
+      !this.followUpQuestions[value].multiSelect
+    ) {
+      this.temporaryAnswer = value;
+      this.followUpOptions = this.followUpQuestions[value];
+    } else if (
+      this.followUpQuestions &&
+      this.followUpQuestions[value] &&
+      this.followUpQuestions[value].multiSelect
+    ) {
+      this.temporaryAnswer = value;
+      this.followUpOptions = this.followUpQuestions[value].multiSelect;
+    } else if (this.followUpQuestions && this.followUpQuestions["default"]) {
+      this.temporaryAnswer = value;
+      this.followUpOptions = this.followUpQuestions["default"].multiSelect;
+    } else {
+      this.followUpOptions = null;
+      this.submit(value);
     }
   }
 
@@ -239,44 +623,172 @@ export class Inweb {
     );
   }
 
-  render() {
-    const survey = (
-      <div class="container">
-        <div class="question">{this.question}</div>
-        {this.getOptions()}
-      </div>
-    );
-
-    const cookieSet = this.readCookie(this.cookieId || this.el.id);
-
-    let thankYouNote = <div />;
+  getThankYouText(cookieSet) {
+    let thankYouNote;
     if (cookieSet) {
+      let submittedResponse = isNaN(cookieSet)
+        ? cookieSet
+        : parseInt(cookieSet, 10);
+      if (this.conditionalThankYou[submittedResponse]) {
+        thankYouNote = (
+          <div class="text">{this.conditionalThankYou[submittedResponse]}</div>
+        );
+      }
+    } else if (
+      this.currentAnswer &&
+      this.conditionalThankYou[this.currentAnswer]
+    ) {
       thankYouNote = (
-        <div class="text">
-          {this.conditionalThankYou[cookieSet.toLowerCase()]}
-        </div>
-      );
-    } else if (this.currentAnswer) {
-      thankYouNote = (
-        <div class="text">
-          {this.conditionalThankYou[this.currentAnswer.toLowerCase()]}
-        </div>
+        <div class="text">{this.conditionalThankYou[this.currentAnswer]}</div>
       );
     }
 
+    return thankYouNote || <div>Thank you for your response!</div>;
+  }
+
+  prepareSurveyFor(question: Question) {
+    return (
+      <div class="container">
+        <div class="question">{question.text}</div>
+        <div>
+          {this.getOptionsFor(question)}
+          {this.followUpOptions ? (
+            <div>
+              <div
+                class="cc-overlay"
+                onClick={() => {
+                  this.dismissFollowup();
+                }}
+              />
+              <div class="menu">
+                <div class="menu-item question-text">
+                  {this.getFollowupQuestionText()}
+                </div>
+                {this.followUpOptions.map(x => {
+                  return (
+                    <div
+                      class="menu-item"
+                      onClick={() => this.submitFollowup(x)}
+                    >
+                      {x}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  submitFollowup(value) {
+    this.submit(this.temporaryAnswer, value);
+    this.followUpOptions = null;
+  }
+  postPartial(flush = false) {
+    let response = this.compileResponse(this.temporaryAnswer);
+    postPartial(this._surveySettings.partialResponseId, response, flush);
+  }
+  dismissFollowup() {
+    if (this._surveySettings && this._surveySettings.partialResponseId) {
+      this.postPartial();
+    } else {
+      this.submit(this.temporaryAnswer);
+    }
+    this.followUpOptions = null;
+  }
+  getSurvey() {
+    let survey;
+    if (!this.useToken) {
+      survey = (
+        <div class="container">
+          <div class="question">{this.question}</div>
+          <div>
+            {this.getOptions()}
+            {this.followUpOptions ? (
+              <div>
+                <div
+                  class="cc-overlay"
+                  onClick={() => {
+                    this.dismissFollowup();
+                  }}
+                />
+                <div class="menu">
+                  <div class="menu-item question-text">
+                    {this.getFollowupQuestionText()}
+                  </div>
+                  {this.followUpOptions.map(x => {
+                    return (
+                      <div
+                        class="menu-item"
+                        onClick={() => this.submitFollowup(x)}
+                      >
+                        {x}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
+        </div>
+      );
+    } else if (this._surveySettings && this.firstQuestion) {
+      return this.prepareSurveyFor(this.firstQuestion);
+    }
+    return survey;
+  }
+  getFollowupQuestionText() {
+    if (this.followUpQuestions) {
+      let question =
+        this.followUpQuestions[this.temporaryAnswer] ||
+        this.followUpQuestions["default"];
+      if (question && question.text) {
+        return question.text;
+      } else if (this.temporaryAnswer === "Yes" || this.temporaryAnswer >= 4) {
+        return "What did you like?";
+      } else if (this.temporaryAnswer === "No" || this.temporaryAnswer < 4) {
+        return "What did you dislike?";
+      } else {
+        return "Choose an reason for your rating.";
+      }
+    }
+  }
+  render() {
+    const survey = this.getSurvey();
+
+    const cookieSet = this.readCookie(this.cookieId || this.el.id);
+
     const submitted = <div class="text">Saving your response..</div>;
+
+    /****
+     * answered - response collected from user and sent to server
+     * submitted - posted response to server successfully
+     *
+     * if not to hide
+     *  show thank you note
+     * else if answered earlier
+     *  show nothing
+     * else if answered now
+     *  show thank you text
+     * */
 
     if (this.responseState === "submitted" || cookieSet) {
       if (!this.hideAfterSubmission) {
-        return thankYouNote;
+        return this.getThankYouText(cookieSet);
       } else if (!this.answeredNow) {
         return <div />;
       } else if (this.answeredNow) {
-        return thankYouNote;
+        return this.getThankYouText(cookieSet);
       }
     } else if (this.responseState === "answered") {
       if (this.hideAfterSubmission) {
-        return thankYouNote;
+        return this.getThankYouText(cookieSet);
       } else {
         return submitted;
       }
