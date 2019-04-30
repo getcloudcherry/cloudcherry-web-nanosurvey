@@ -48,7 +48,7 @@ Below the html tag, add the following code in a script tag
     var _inweb = document.querySelector('#widget-usability');
 
     _inweb.prefills = {
-      '59f0762ed50981ce6442dab4': 'Venki',
+      '59f0762ed50981ce6442dab4': 'Alex',
       '5c272306c3d98742b0f7d576': 'Widgets',
     }
 </script>
@@ -130,6 +130,44 @@ While throttling, you can choose to show the survey or hide it.
 <script>
   _inweb.hideAfterSubmission = true;
 </script>
+```
+
+## Show followup question as drop down
+
+You can show follow up options from each answer. This will show up once user answers a question. Add a followup question to post the response to.
+
+```
+_inweb.followUpQuestions = {
+        Yes: ["Content", "Right to the point!"],
+        No: ["Too Lengthy", "Does not makes sense"]
+      };
+_inweb.followUpQuestionId = "5c272306c3d98742b0f7d577";
+```
+
+If you need these options to be recorded as two different questions, use the following syntax.
+
+```
+_inweb.followUpQuestions = {
+        Yes: {
+          id: "5c272306c3d98742b0f7d577", // Positive followup question id
+          multiSelect: ["Content", "Right to the point!"]
+        },
+        No: {
+          id: "5c272306c3d98742b0f7d578", // Negative followup question id
+          multiSelect: ["Too Lengthy", "Does not makes sense"]
+        }
+      };
+_inweb.followUpQuestionId = "5c272306c3d98742b0f7d577";
+```
+
+## Use survey configuration from dashboard
+
+You can use the survey configuration from the CloudCherry dashboard. It will pick the first question (primary) that is supported and render it inline."Star-5", "Smile-5", "Select".
+Any following Single Select question with tag 'follow-up' will be take as follow up question. You can configure the conditions in the platform to show different followup options.
+A follow up question can have only on condition to it (dependent on primary question). You will also be able to take advantage of partial submission (if enabled from dashboard).
+
+```
+ <cc-inweb id="feedback" use-token="true" token="MR-13286"></cc-inweb>
 ```
 
 ## Customize the component for your brand

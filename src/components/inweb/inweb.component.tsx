@@ -160,6 +160,9 @@ export class Inweb {
   currentAnswer: number | string;
   temporaryAnswer: any;
   @State() ratingHovered = null;
+  /**
+   * Set survey settings from a central location. This will be handy to use same token with multiple survey within a page.
+   */
   @Prop() set surveySettings(settings: Settings) {
     this._surveySettings = settings;
   }
@@ -631,7 +634,9 @@ export class Inweb {
         : parseInt(cookieSet, 10);
       if (this.conditionalThankYou[submittedResponse]) {
         thankYouNote = (
-          <div class="text">{this.conditionalThankYou[submittedResponse]}</div>
+          <div class="thankyou text">
+            {this.conditionalThankYou[submittedResponse]}
+          </div>
         );
       }
     } else if (
@@ -639,11 +644,17 @@ export class Inweb {
       this.conditionalThankYou[this.currentAnswer]
     ) {
       thankYouNote = (
-        <div class="text">{this.conditionalThankYou[this.currentAnswer]}</div>
+        <div class="thankyou text">
+          {this.conditionalThankYou[this.currentAnswer]}
+        </div>
       );
     }
 
-    return thankYouNote || <div>Thank you for your response!</div>;
+    return (
+      thankYouNote || (
+        <div class="thankyou text">Thank you for your response!</div>
+      )
+    );
   }
 
   prepareSurveyFor(question: Question) {

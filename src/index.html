@@ -98,11 +98,16 @@
       feedback.token = "pc-56874";
       feedback["questionId"] = "5c272306c3d98742b0f7d577";
       feedback.followUpQuestions = {
-        Yes: ["Content", "Right to the point!"],
-        No: ["Lengthy", "Does not makes sense"]
+        Yes: {
+          id: "5c272306c3d98742b0f7d577",
+          multiSelect: ["Content", "Right to the point!"]
+        },
+        No: {
+          id: "5c272306c3d98742b0f7d578",
+          multiSelect: ["Lengthy", "Does not makes sense"]
+        }
       };
       feedback.icons = "hide";
-      feedback.followUpQuestionId = "5c272306c3d98742b0f7d577";
       document.getElementById("test-id").appendChild(feedback);
     </script>
 

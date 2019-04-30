@@ -60,6 +60,9 @@ export namespace Components {
     * Question-Id to post responses for
     */
     'questionId': string;
+    /**
+    * Set survey settings from a central location. This will be handy to use same token with multiple survey within a page.
+    */
     'surveySettings': any;
     /**
     * Configure throttling duration
@@ -123,6 +126,9 @@ export namespace Components {
     * Question-Id to post responses for
     */
     'questionId'?: string;
+    /**
+    * Set survey settings from a central location. This will be handy to use same token with multiple survey within a page.
+    */
     'surveySettings'?: any;
     /**
     * Configure throttling duration
