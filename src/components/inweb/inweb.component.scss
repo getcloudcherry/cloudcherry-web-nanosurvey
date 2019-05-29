@@ -90,44 +90,80 @@
     display: flex;
     align-items: center;
     width: 48px;
-    span {
-      height: 20px;
+    div.text-button {
       --cc-inweb-yes-background: blue;
       --cc-inweb-no-background: blue;
-      padding: 3px 12px;
-      border-radius: 20px;
+      padding: 0 16px;
+      border-radius: 4px;
+      text-align: center;
+      min-width: 32px;
+      line-height: 36px;
+      position: relative;
+
+      .button-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        transition: opacity 0.2s cubic-bezier(0.35, 0, 0.25, 1),
+          background-color 0.2s cubic-bezier(0.35, 0, 0.25, 1);
+        opacity: 0;
+      }
       &.yes {
         color: var(--cc-inweb-yes-color, var(--cc-inweb-color, #6a6a6a));
-        border: 1px solid
-          var(--cc-inweb-yes-color, var(--cc-inweb-color, #6a6a6a));
         &:hover {
-          @if var(--cc-inweb-yes-color, var(--cc-inweb-color, #ffffff)) ==
-            #ffffff
-          {
-          } @else {
-            color: #ffffff;
+          // @if var(--cc-inweb-yes-color, var(--cc-inweb-color, #ffffff)) ==
+          //   #ffffff
+          // {
+          // } @else {
+          //   color: #ffffff;
+          // }
+          .button-background {
+            opacity: 0.04;
+            background-color: var(
+              --cc-inweb-yes-color,
+              var(--cc-inweb-color, #6a6a6a)
+            );
           }
-          background-color: var(
-            --cc-inweb-yes-color,
-            var(--cc-inweb-color, #6a6a6a)
-          );
+        }
+        &:active {
+          .button-background {
+            opacity: 0.1;
+            background-color: var(
+              --cc-inweb-yes-color,
+              var(--cc-inweb-color, #6a6a6a)
+            );
+          }
         }
       }
       &.no {
         color: var(--cc-inweb-no-color, var(--cc-inweb-color, #6a6a6a));
-        border: 1px solid
-          var(--cc-inweb-no-color, var(--cc-inweb-color, #6a6a6a));
         &:hover {
-          @if var(--cc-inweb-no-color, var(--cc-inweb-color, #ffffff)) ==
-            #ffffff
-          {
-          } @else {
-            color: #ffffff;
+          // @if var(--cc-inweb-no-color, var(--cc-inweb-color, #ffffff)) ==
+          //   #ffffff
+          // {
+          // } @else {
+          //   color: #ffffff;
+          // }
+          .button-background {
+            opacity: 0.04;
+            background-color: var(
+              --cc-inweb-no-color,
+              var(--cc-inweb-color, #6a6a6a)
+            );
           }
-          background-color: var(
-            --cc-inweb-no-color,
-            var(--cc-inweb-color, #6a6a6a)
-          );
+        }
+        &:active {
+          .button-background {
+            opacity: 0.1;
+            background-color: var(
+              --cc-inweb-yes-color,
+              var(--cc-inweb-color, #6a6a6a)
+            );
+          }
         }
       }
 

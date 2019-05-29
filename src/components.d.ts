@@ -48,6 +48,7 @@ export namespace Components {
     * Use icons or text based options
     */
     'icons': "show" | "hide";
+    'model': any;
     /**
     * prefills
     */
@@ -72,6 +73,7 @@ export namespace Components {
     * token to submit responses
     */
     'token': string;
+    'type': any;
     /**
     * Force the component to get token settings from server. It will use the first valid question to show.
     */
@@ -113,6 +115,7 @@ export namespace Components {
     * Use icons or text based options
     */
     'icons'?: "show" | "hide";
+    'model'?: any;
     'onCc-inweb-response'?: (event: CustomEvent) => void;
     /**
     * prefills
@@ -138,6 +141,7 @@ export namespace Components {
     * token to submit responses
     */
     'token'?: string;
+    'type'?: any;
     /**
     * Force the component to get token settings from server. It will use the first valid question to show.
     */

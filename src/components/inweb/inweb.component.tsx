@@ -104,6 +104,8 @@ export class Inweb {
     this._followUpQuestionId = value;
   }
 
+  @Prop() type = null;
+
   _followUpQuestionId;
   @Element() el;
   /**
@@ -159,6 +161,7 @@ export class Inweb {
   answeredNow = false;
   currentAnswer: number | string;
   temporaryAnswer: any;
+  @Prop() model;
   @State() ratingHovered = null;
   /**
    * Set survey settings from a central location. This will be handy to use same token with multiple survey within a page.
@@ -265,10 +268,6 @@ export class Inweb {
     let responses = [];
     let _response = this.compileResponse(response);
     let followUpResponse;
-    console.log(
-      this.followUpQuestions && this.followUpQuestions[response],
-      "question found"
-    );
 
     if (
       followUpAnswer &&
@@ -381,11 +380,17 @@ export class Inweb {
         numberInput: isNumberType ? response : null
       };
     }
+    let result;
+    if (typeof response === "boolean") {
+      result = response ? "Yes" : "No";
+    } else {
+      result = response;
+    }
     return {
       questionId: this.questionId,
       questionText: this.question,
-      textInput: response ? "Yes" : "No",
-      numberInput: null
+      textInput: typeof result === "string" ? result : null,
+      numberInput: typeof result === "number" ? result : null
     };
   }
 
@@ -480,10 +485,18 @@ export class Inweb {
 
   getLegendAsTitle(i, displayLegend) {
     let title;
-    if (i === 1 && displayLegend[0]) {
-      title = displayLegend[0];
-    } else if (i === 5 && displayLegend[1]) {
-      title = displayLegend[1];
+    if (i === 1) {
+      if (displayLegend && displayLegend[0]) {
+        title = displayLegend[0];
+      } else {
+        title = "Low";
+      }
+    } else if (i === 5) {
+      if (displayLegend && displayLegend[1]) {
+        title = displayLegend[1];
+      } else {
+        title = "High";
+      }
     }
 
     return title;
@@ -511,18 +524,26 @@ export class Inweb {
     this.validateAndSubmit(event.target.value);
   }
 
+  getType(question) {
+    if (question && question.displayType) {
+      return question.displayType;
+    } else if (this.type) {
+      return this.type;
+    }
+  }
+
   getOptionsFor(question: Question) {
-    if (question.displayType === "Star-5") {
+    if (this.getType(question) === "Star-5") {
       return this.getStars(
         question,
-        this.ratingHovered || this.temporaryAnswer
+        this.ratingHovered || this.temporaryAnswer || this.model
       );
-    } else if (question.displayType === "Smile-5") {
+    } else if (this.getType(question) === "Smile-5") {
       return this.getSmiles(
         question,
-        this.ratingHovered || this.temporaryAnswer
+        this.ratingHovered || this.temporaryAnswer || this.model
       );
-    } else if (question.displayType === "Select") {
+    } else if (this.getType(question) === "Select") {
       return this.getSelectOptions(question);
     }
   }
@@ -531,12 +552,20 @@ export class Inweb {
     if (this.icons === "hide") {
       return (
         <div class="options">
-          <span class="yes" onClick={() => this.validateAndSubmit("Yes")}>
+          <div
+            class="yes text-button"
+            onClick={() => this.validateAndSubmit("Yes")}
+          >
+            <div class="button-background" />
             Yes
-          </span>
-          <span class="no" onClick={() => this.validateAndSubmit("No")}>
+          </div>
+          <div
+            class="no text-button"
+            onClick={() => this.validateAndSubmit("No")}
+          >
+            <div class="button-background" />
             No
-          </span>
+          </div>
         </div>
       );
     } else {
@@ -660,7 +689,9 @@ export class Inweb {
   prepareSurveyFor(question: Question) {
     return (
       <div class="container">
-        <div class="question">{question.text}</div>
+        <div class="question">
+          {question && question.text ? question.text : this.question}
+        </div>
         <div>
           {this.getOptionsFor(question)}
           {this.followUpOptions ? (
@@ -703,6 +734,7 @@ export class Inweb {
     let response = this.compileResponse(this.temporaryAnswer);
     postPartial(this._surveySettings.partialResponseId, response, flush);
   }
+
   dismissFollowup() {
     if (this._surveySettings && this._surveySettings.partialResponseId) {
       this.postPartial();
@@ -711,9 +743,10 @@ export class Inweb {
     }
     this.followUpOptions = null;
   }
+
   getSurvey() {
     let survey;
-    if (!this.useToken) {
+    if (!this.useToken && !this.type) {
       survey = (
         <div class="container">
           <div class="question">{this.question}</div>
@@ -749,7 +782,7 @@ export class Inweb {
           </div>
         </div>
       );
-    } else if (this._surveySettings && this.firstQuestion) {
+    } else if (this.type || (this._surveySettings && this.firstQuestion)) {
       return this.prepareSurveyFor(this.firstQuestion);
     }
     return survey;
