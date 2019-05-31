@@ -10,13 +10,19 @@ To start using this channel within your web application, follow one of below met
 
 ### Script Tag
 
-- Put a script tag similar to this `<script src='https://unpkg.com/inweb-survey@1.1.0-beta/dist/inweb.js'></script>` in the head of your index.html
+- Add following script tags  
+  `<script type="module" src='https://unpkg.com/inweb-survey/dist/index.mjs'></script>`
+  `<script nomodule src='https://unpkg.com/inweb-survey/dist/index.js'></script>`
+  in the head of your index.html
 - Then you can use the element anywhere in your template, JSX, html etc.
 
 ### Node Modules
 
 - `npm install inweb-survey`
-- Put a script tag similar to this <script src='node_modules/inweb-survey/dist/inweb.js'></script> in the head of your index.html
+- Put a script tag similar to this
+  `<script type="module" src='node_modules/inweb-survey/dist/index.mjs'></script>`
+  `<script nomodule src="node_modules/inweb-survey/dist/index.js"></script>`
+  in the head of your index.html
 - Then you can use the element anywhere in your template, JSX, html etc.
 
 ### In a stencil-app-starter app
