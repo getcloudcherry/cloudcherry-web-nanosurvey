@@ -11,8 +11,8 @@ To start using this channel within your web application, follow one of below met
 ### Script Tag
 
 - Add following script tags  
-  `<script type="module" src='https://unpkg.com/inweb-survey/dist/index.mjs'></script>`
-  `<script nomodule src='https://unpkg.com/inweb-survey/dist/index.js'></script>`
+  `<script type="module" src='https://unpkg.com/inweb-survey/dist/inweb/inweb.esm.js'></script>`
+  `<script nomodule src='https://unpkg.com/inweb-survey/dist/inweb/inweb.js'></script>`
   in the head of your index.html
 - Then you can use the element anywhere in your template, JSX, html etc.
 
@@ -20,8 +20,8 @@ To start using this channel within your web application, follow one of below met
 
 - `npm install inweb-survey`
 - Put a script tag similar to this
-  `<script type="module" src='node_modules/inweb-survey/dist/index.mjs'></script>`
-  `<script nomodule src="node_modules/inweb-survey/dist/index.js"></script>`
+  `<script type="module" src='node_modules/inweb-survey/dist/inweb/inweb.esm.js'></script>`
+  `<script nomodule src="node_modules/inweb-survey/dist/inweb/inweb.js"></script>`
   in the head of your index.html
 - Then you can use the element anywhere in your template, JSX, html etc.
 
