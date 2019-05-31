@@ -2,8 +2,11 @@
   "name": "inweb-survey",
   "version": "1.1.0-beta",
   "description": "In Web channel for CloudCherry CEM platform",
-  "module": "dist/esm/index.js",
+  "module": "dist/index.mjs",
   "main": "dist/inweb.js",
+  "es2015": "dist/esm/index.mjs",
+  "es2017": "dist/esm/index.mjs",
+  "jsnext:main": "dist/esm/index.mjs",
   "unpkg": "dist/inweb.js",
   "types": "dist/types/components.d.ts",
   "collection": "dist/collection/collection-manifest.json",
@@ -29,7 +32,7 @@
     "@stencil/sass": "^0.1.1"
   },
   "devDependencies": {
-    "@stencil/core": "0.18.1"
+    "@stencil/core": "^1.0.0-beta.8"
   },
   "license": "MIT"
 }

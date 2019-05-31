@@ -5,13 +5,10 @@
  */
 
 
-import '@stencil/core';
-
-
+import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
-
   interface CcInweb {
     /**
     * Show conditional thank you message based on the response works only for Yes/No question
@@ -32,10 +29,6 @@ export namespace Components {
     * Opt out of sending response to server. Handle in event hooks
     */
     'doNotPost': boolean;
-    /**
-    * Question id for follow up response
-    */
-    'followUpQuestionId': any;
     /**
     * Dictionary of followUp options to be asked
     */
@@ -62,10 +55,6 @@ export namespace Components {
     */
     'questionId': string;
     /**
-    * Set survey settings from a central location. This will be handy to use same token with multiple survey within a page.
-    */
-    'surveySettings': any;
-    /**
     * Configure throttling duration
     */
     'throttleForDays': number;
@@ -79,7 +68,23 @@ export namespace Components {
     */
     'useToken': boolean;
   }
-  interface CcInwebAttributes extends StencilHTMLAttributes {
+}
+
+declare global {
+
+
+  interface HTMLCcInwebElement extends Components.CcInweb, HTMLStencilElement {}
+  var HTMLCcInwebElement: {
+    prototype: HTMLCcInwebElement;
+    new (): HTMLCcInwebElement;
+  };
+  interface HTMLElementTagNameMap {
+    'cc-inweb': HTMLCcInwebElement;
+  }
+}
+
+declare namespace LocalJSX {
+  interface CcInweb extends JSXBase.HTMLAttributes<HTMLCcInwebElement> {
     /**
     * Show conditional thank you message based on the response works only for Yes/No question
     */
@@ -100,10 +105,6 @@ export namespace Components {
     */
     'doNotPost'?: boolean;
     /**
-    * Question id for follow up response
-    */
-    'followUpQuestionId'?: any;
-    /**
     * Dictionary of followUp options to be asked
     */
     'followUpQuestions'?: any;
@@ -116,7 +117,7 @@ export namespace Components {
     */
     'icons'?: "show" | "hide";
     'model'?: any;
-    'onCc-inweb-response'?: (event: CustomEvent) => void;
+    'onCc-inweb-response'?: (event: CustomEvent<any>) => void;
     /**
     * prefills
     */
@@ -129,10 +130,6 @@ export namespace Components {
     * Question-Id to post responses for
     */
     'questionId'?: string;
-    /**
-    * Set survey settings from a central location. This will be handy to use same token with multiple survey within a page.
-    */
-    'surveySettings'?: any;
     /**
     * Configure throttling duration
     */
@@ -147,39 +144,19 @@ export namespace Components {
     */
     'useToken'?: boolean;
   }
+
+  interface IntrinsicElements {
+    'cc-inweb': CcInweb;
+  }
 }
 
-declare global {
-  interface StencilElementInterfaces {
-    'CcInweb': Components.CcInweb;
-  }
-
-  interface StencilIntrinsicElements {
-    'cc-inweb': Components.CcInwebAttributes;
-  }
+export { LocalJSX as JSX };
 
 
-  interface HTMLCcInwebElement extends Components.CcInweb, HTMLStencilElement {}
-  var HTMLCcInwebElement: {
-    prototype: HTMLCcInwebElement;
-    new (): HTMLCcInwebElement;
-  };
-
-  interface HTMLElementTagNameMap {
-    'cc-inweb': HTMLCcInwebElement
-  }
-
-  interface ElementTagNameMap {
-    'cc-inweb': HTMLCcInwebElement;
-  }
-
-
+declare module "@stencil/core" {
   export namespace JSX {
-    export interface Element {}
-    export interface IntrinsicElements extends StencilIntrinsicElements {
-      [tagName: string]: any;
-    }
+    interface IntrinsicElements extends LocalJSX.IntrinsicElements {}
   }
-  export interface HTMLAttributes extends StencilHTMLAttributes {}
-
 }
+
+

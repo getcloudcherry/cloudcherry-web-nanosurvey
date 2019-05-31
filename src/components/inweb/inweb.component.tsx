@@ -4,7 +4,8 @@ import {
   Event,
   EventEmitter,
   State,
-  Element
+  Element,
+  h
 } from "@stencil/core";
 import {
   sendPostRequest,
