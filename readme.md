@@ -206,3 +206,12 @@ Set style for one widget
 
 <cc-inweb style="--cc-inweb-color: red"></cc-inweb>
 ```
+
+## Position the follow up drop down
+
+Show followup options above or below the question. By default, opens up above.
+
+```
+_inweb.position = 'above';
+_inweb.position = 'below';
+```

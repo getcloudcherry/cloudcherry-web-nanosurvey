@@ -22,10 +22,6 @@ export namespace Components {
     */
     'conditionalThankYouTextCallBack': any;
     /**
-    * Use Custom key for managing throttling
-    */
-    'cookieId': string;
-    /**
     * Opt out of sending response to server. Handle in event hooks
     */
     'doNotPost': boolean;
@@ -42,6 +38,7 @@ export namespace Components {
     */
     'icons': "show" | "hide";
     'model': any;
+    'position': "above" | "below";
     /**
     * prefills
     */
@@ -97,10 +94,6 @@ declare namespace LocalJSX {
     */
     'conditionalThankYouTextCallBack'?: any;
     /**
-    * Use Custom key for managing throttling
-    */
-    'cookieId'?: string;
-    /**
     * Opt out of sending response to server. Handle in event hooks
     */
     'doNotPost'?: boolean;
@@ -118,6 +111,7 @@ declare namespace LocalJSX {
     'icons'?: "show" | "hide";
     'model'?: any;
     'onCc-inweb-response'?: (event: CustomEvent<any>) => void;
+    'position'?: "above" | "below";
     /**
     * prefills
     */

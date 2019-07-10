@@ -89,10 +89,15 @@ export class Inweb {
    * prefills
    */
   @Prop() prefills: any;
+  _cookieId: string = null;
   /**
    * Use Custom key for managing throttling
    */
-  @Prop() cookieId: string;
+  @Prop() set cookieId(id) {
+    this._cookieId = id;
+    this.initComponent();
+  }
+
   /**
    * Question text that will be shown to the user
    */
@@ -104,10 +109,10 @@ export class Inweb {
   @Prop() set followUpQuestionId(value) {
     this._followUpQuestionId = value;
   }
+  _followUpQuestionId;
 
   @Prop() type = null;
 
-  _followUpQuestionId;
   @Element() el;
   /**
    * Show conditional thank you message based on the response
@@ -156,6 +161,8 @@ export class Inweb {
   @Prop()
   useToken = false;
 
+  @Prop() position: "above" | "below" = "above";
+
   @State() followUpOptions: Array<string> = null;
   @State() _surveySettings: Settings;
   firstQuestion: Question;
@@ -173,20 +180,31 @@ export class Inweb {
 
   @State() lastAnswer = null;
 
-  componentWillLoad() {
-    const cookieSet = this.readCookie(this.cookieId || this.el.id);
-    if (this.useToken && this.token && !cookieSet) {
+  initComponent() {
+    const cookieSet = this.readCookie(this._cookieId || this.el.id);
+    this.firstQuestion = null;
+    this.answeredNow = false;
+    this.currentAnswer = null;
+    this.temporaryAnswer = null;
+    this.responseState = "init";
+    if (this.token && !cookieSet) {
       sendGetRequest(this.token)
         .then(x => x.json())
         .then((response: Settings) => {
           if (response) {
             this._surveySettings = response;
-            this.setFirstValidQuestion();
+            if (this.useToken) {
+              this.setFirstValidQuestion();
+            }
           } else {
             // do not show the question
           }
         });
     }
+  }
+
+  componentWillLoad() {
+    this.initComponent();
   }
 
   setFirstValidQuestion() {
@@ -324,7 +342,7 @@ export class Inweb {
           if (submittedResponse) {
             this.responseState = "submitted";
             this.createCookie(
-              this.cookieId || this.el.id,
+              this._cookieId || this.el.id,
               response,
               this.throttleForDays
             );
@@ -703,7 +721,7 @@ export class Inweb {
                   this.dismissFollowup();
                 }}
               />
-              <div class="menu">
+              <div class={`menu ${this.position}`}>
                 <div class="menu-item question-text">
                   {this.getFollowupQuestionText()}
                 </div>
@@ -761,7 +779,7 @@ export class Inweb {
                     this.dismissFollowup();
                   }}
                 />
-                <div class="menu">
+                <div class={`menu ${this.position}`}>
                   <div class="menu-item question-text">
                     {this.getFollowupQuestionText()}
                   </div>
@@ -807,7 +825,7 @@ export class Inweb {
   render() {
     const survey = this.getSurvey();
 
-    const cookieSet = this.readCookie(this.cookieId || this.el.id);
+    const cookieSet = this.readCookie(this._cookieId || this.el.id);
 
     const submitted = <div class="text">Saving your response..</div>;
 
