@@ -22,15 +22,23 @@ export namespace Components {
     */
     'conditionalThankYouTextCallBack': any;
     /**
+    * Use Custom key for managing throttling
+    */
+    'cookieId': any;
+    /**
     * Opt out of sending response to server. Handle in event hooks
     */
     'doNotPost': boolean;
+    /**
+    * Question id for follow up response
+    */
+    'followUpQuestionId': string;
     /**
     * Dictionary of followUp options to be asked
     */
     'followUpQuestions': any;
     /**
-    * Optionaly hide the survey after submission
+    * Optionally hide the survey after submission
     */
     'hideAfterSubmission': boolean;
     /**
@@ -51,6 +59,10 @@ export namespace Components {
     * Question-Id to post responses for
     */
     'questionId': string;
+    /**
+    * Set survey settings from a central location. This will be handy to use same token with multiple survey within a page.
+    */
+    'surveySettings': any;
     /**
     * Configure throttling duration
     */
@@ -94,15 +106,23 @@ declare namespace LocalJSX {
     */
     'conditionalThankYouTextCallBack'?: any;
     /**
+    * Use Custom key for managing throttling
+    */
+    'cookieId'?: any;
+    /**
     * Opt out of sending response to server. Handle in event hooks
     */
     'doNotPost'?: boolean;
+    /**
+    * Question id for follow up response
+    */
+    'followUpQuestionId'?: string;
     /**
     * Dictionary of followUp options to be asked
     */
     'followUpQuestions'?: any;
     /**
-    * Optionaly hide the survey after submission
+    * Optionally hide the survey after submission
     */
     'hideAfterSubmission'?: boolean;
     /**
@@ -124,6 +144,10 @@ declare namespace LocalJSX {
     * Question-Id to post responses for
     */
     'questionId'?: string;
+    /**
+    * Set survey settings from a central location. This will be handy to use same token with multiple survey within a page.
+    */
+    'surveySettings'?: any;
     /**
     * Configure throttling duration
     */

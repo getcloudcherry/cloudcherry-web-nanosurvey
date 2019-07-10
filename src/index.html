@@ -31,6 +31,7 @@
       token="PC-56874"
       question-id="5c272306c3d98742b0f7d577"
     ></cc-inweb>
+    <button onClick="changeCookieId()">Change Cookie</button>
     <script>
       // Sample usage for a section in a page
       var inweb1 = document.querySelector("#widget-usability");
@@ -68,6 +69,10 @@
       document.addEventListener("cc-inweb-response", function($event) {
         console.log($event, "event");
       });
+
+      function changeCookieId() {
+        inweb1.cookieId = "temp123";
+      }
     </script>
     <cc-inweb
       id="follow-up"

@@ -5,7 +5,8 @@ import {
   EventEmitter,
   State,
   Element,
-  h
+  h,
+  Watch
 } from "@stencil/core";
 import {
   sendPostRequest,
@@ -78,7 +79,7 @@ export class Inweb {
    */
   @Prop() questionId: string;
   /**
-   * Optionaly hide the survey after submission
+   * Optionally hide the survey after submission
    */
   @Prop() hideAfterSubmission = false;
   /**
@@ -93,9 +94,13 @@ export class Inweb {
   /**
    * Use Custom key for managing throttling
    */
-  @Prop() set cookieId(id) {
-    this._cookieId = id;
-    this.initComponent();
+  @Prop() cookieId;
+
+  @Watch("cookieId") resetState(newValue, oldValue) {
+    this._cookieId = newValue;
+    if (newValue !== oldValue) {
+      this.initComponent();
+    }
   }
 
   /**
@@ -106,9 +111,12 @@ export class Inweb {
   /**
    * Question id for follow up response
    */
-  @Prop() set followUpQuestionId(value) {
-    this._followUpQuestionId = value;
+  @Prop() followUpQuestionId: string;
+
+  @Watch("followUpQuestionId") setFollowupQuestionId(newValue) {
+    this._followUpQuestionId = newValue;
   }
+
   _followUpQuestionId;
 
   @Prop() type = null;
@@ -174,19 +182,27 @@ export class Inweb {
   /**
    * Set survey settings from a central location. This will be handy to use same token with multiple survey within a page.
    */
-  @Prop() set surveySettings(settings: Settings) {
-    this._surveySettings = settings;
+  @Prop() surveySettings;
+
+  @Watch("survey-settings") setSurveySettings(newValue) {
+    this._surveySettings = newValue;
   }
 
   @State() lastAnswer = null;
 
   initComponent() {
-    const cookieSet = this.readCookie(this._cookieId || this.el.id);
+    const cookieSet = this.readCookie(
+      this._cookieId || this._cookieId || this.el.id
+    );
     this.firstQuestion = null;
     this.answeredNow = false;
     this.currentAnswer = null;
     this.temporaryAnswer = null;
     this.responseState = "init";
+    this._cookieId = this.cookieId;
+    this._followUpQuestionId = this.followUpQuestionId;
+    this._surveySettings = this.surveySettings;
+
     if (this.token && !cookieSet) {
       sendGetRequest(this.token)
         .then(x => x.json())
@@ -342,7 +358,7 @@ export class Inweb {
           if (submittedResponse) {
             this.responseState = "submitted";
             this.createCookie(
-              this._cookieId || this.el.id,
+              this.cookieId || this._cookieId || this.el.id,
               response,
               this.throttleForDays
             );
@@ -825,7 +841,9 @@ export class Inweb {
   render() {
     const survey = this.getSurvey();
 
-    const cookieSet = this.readCookie(this._cookieId || this.el.id);
+    const cookieSet = this.readCookie(
+      this._cookieId || this._cookieId || this.el.id
+    );
 
     const submitted = <div class="text">Saving your response..</div>;
 
