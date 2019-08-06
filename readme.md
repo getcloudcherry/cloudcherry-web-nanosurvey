@@ -2,7 +2,17 @@
 
 # Inweb Survey
 
-Web component as a channel for CEM for [CloudCherry](https://cloudcherry.com) users. Works great from within a webpage.
+![Cloudcherry brand logo](https://d2o5cklyzmvqdi.cloudfront.net/wp-content/uploads/2019/03/cc-redlogo.png)
+
+Web component as a channel for CEM for [CloudCherry](https://cloudcherry.com) users. Light weight, deploy and forget tool for online feedback collection.
+
+Looking for subtle non-intrusive channel to collect feedback from online platforms? Inweb Survey (CC Nanosurvey) is here to help. Supports 'Yes/No', 'Star', 'Smiley' questions. This can be followed up with a 'Single Answer' drop down question.
+
+![Nanosurvey sample](https://cx.getcloudcherry.com/survey-assets/nanosurvey-sample.png)
+
+Measure quality of your website content or find out what went wrong with online experience. Correlate this data with CEM data from other channels. Take necessary course correction. Delight your customers.
+
+Reach out to [Support](mailto:support@getcloudcherry.com) (support@getcloudcherry.com) to deploy this channel in bulk for your brand.
 
 ## Getting Started
 
