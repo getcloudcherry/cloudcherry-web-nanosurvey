@@ -743,74 +743,13 @@ export class Inweb {
   prepareSurveyFor(question: Question) {
     return (
       <div class="container">
-        <div class="question">
-          {question && question.text ? question.text : this.question}
-        </div>
-        <div>
-          {this.getOptionsFor(question)}
-          {this.followUpOptions ? (
-            <div>
-              <div
-                class="cc-overlay"
-                onClick={() => {
-                  this.dismissFollowup();
-                }}
-              />
-              <div class={`menu ${this.position}`}>
-                <div class="menu-item question-text">
-                  {this.getFollowupQuestionText()}
-                </div>
-                {this.followUpOptions.map(x => {
-                  return (
-                    <div
-                      class="menu-item"
-                      onClick={() => this.submitFollowup(x)}
-                    >
-                      {x}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          ) : this.showMultiline ? (
-            <cc-multi-line
-              question={this.getFollowupQuestionText()}
-            ></cc-multi-line>
-          ) : (
-            ""
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  submitFollowup(value) {
-    this.submit(this.temporaryAnswer, value);
-    this.followUpOptions = null;
-  }
-  postPartial(flush = false) {
-    let response = this.compileResponse(this.temporaryAnswer);
-    postPartial(this._surveySettings.partialResponseId, response, flush);
-  }
-
-  dismissFollowup() {
-    if (this._surveySettings && this._surveySettings.partialResponseId) {
-      this.postPartial();
-    } else {
-      this.submit(this.temporaryAnswer);
-    }
-    this.followUpOptions = null;
-  }
-
-  getSurvey() {
-    let survey;
-    if (!this.useToken && !this.type) {
-      survey = (
-        <div class="container">
+        {!this.showMultiline ? (
           <div class="first-row">
-            <div class="question">{this.question}</div>
+            <div class="question">
+              {question && question.text ? question.text : this.question}
+            </div>
             <div>
-              {this.getOptions()}
+              {this.getOptionsFor(question)}
               {this.followUpOptions ? (
                 <div>
                   <div
@@ -840,13 +779,77 @@ export class Inweb {
               )}
             </div>
           </div>
-          {this.showMultiline ? (
+        ) : (
+          <cc-multi-line
+            question={this.getFollowupQuestionText()}
+          ></cc-multi-line>
+        )}
+      </div>
+    );
+  }
+
+  submitFollowup(value) {
+    this.submit(this.temporaryAnswer, value);
+    this.followUpOptions = null;
+  }
+  postPartial(flush = false) {
+    let response = this.compileResponse(this.temporaryAnswer);
+    postPartial(this._surveySettings.partialResponseId, response, flush);
+  }
+
+  dismissFollowup() {
+    if (this._surveySettings && this._surveySettings.partialResponseId) {
+      this.postPartial();
+    } else {
+      this.submit(this.temporaryAnswer);
+    }
+    this.followUpOptions = null;
+  }
+
+  getSurvey() {
+    let survey;
+    if (!this.useToken && !this.type) {
+      survey = (
+        <div class="container">
+          {!this.showMultiline ? (
+            <div class="first-row">
+              <div class="question">{this.question}</div>
+              <div>
+                {this.getOptions()}
+                {this.followUpOptions ? (
+                  <div>
+                    <div
+                      class="cc-overlay"
+                      onClick={() => {
+                        this.dismissFollowup();
+                      }}
+                    />
+                    <div class={`menu ${this.position}`}>
+                      <div class="menu-item question-text">
+                        {this.getFollowupQuestionText()}
+                      </div>
+                      {this.followUpOptions.map(x => {
+                        return (
+                          <div
+                            class="menu-item"
+                            onClick={() => this.submitFollowup(x)}
+                          >
+                            {x}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+            </div>
+          ) : (
             <cc-multi-line
               class="second-row"
               question={this.getFollowupQuestionText()}
             ></cc-multi-line>
-          ) : (
-            ""
           )}
         </div>
       );
