@@ -6,7 +6,8 @@ import {
   State,
   Element,
   h,
-  Watch
+  Watch,
+  Listen
 } from "@stencil/core";
 import {
   sendPostRequest,
@@ -177,6 +178,8 @@ export class Inweb {
   answeredNow = false;
   currentAnswer: number | string;
   temporaryAnswer: any;
+  @State() showMultiline = false;
+
   @Prop() model;
   @State() ratingHovered = null;
   /**
@@ -189,6 +192,11 @@ export class Inweb {
   }
 
   @State() lastAnswer = null;
+
+  @Listen("multilineAnswered") multilineHandler(event: CustomEvent) {
+    event.stopImmediatePropagation();
+    this.submitFollowup(event.detail.text);
+  }
 
   initComponent() {
     const cookieSet = this.readCookie(
@@ -626,21 +634,32 @@ export class Inweb {
     if (
       this.followUpQuestions &&
       this.followUpQuestions[value] &&
+      this.followUpQuestions[value].displayType === "Multiline"
+    ) {
+      // for showing open text
+      this.temporaryAnswer = value;
+      this.showMultiline = true;
+    } else if (
+      this.followUpQuestions &&
+      this.followUpQuestions[value] &&
       !this.followUpQuestions[value].multiSelect
     ) {
       this.temporaryAnswer = value;
       this.followUpOptions = this.followUpQuestions[value];
+      this.showMultiline = false;
     } else if (
       this.followUpQuestions &&
       this.followUpQuestions[value] &&
       this.followUpQuestions[value].multiSelect
     ) {
+      this.showMultiline = false;
       this.temporaryAnswer = value;
       this.followUpOptions = this.followUpQuestions[value].multiSelect;
     } else if (this.followUpQuestions && this.followUpQuestions["default"]) {
       this.temporaryAnswer = value;
       this.followUpOptions = this.followUpQuestions["default"].multiSelect;
     } else {
+      this.showMultiline = false;
       this.followUpOptions = null;
       this.submit(value);
     }
@@ -753,6 +772,10 @@ export class Inweb {
                 })}
               </div>
             </div>
+          ) : this.showMultiline ? (
+            <cc-multi-line
+              question={this.getFollowupQuestionText()}
+            ></cc-multi-line>
           ) : (
             ""
           )}
@@ -784,37 +807,47 @@ export class Inweb {
     if (!this.useToken && !this.type) {
       survey = (
         <div class="container">
-          <div class="question">{this.question}</div>
-          <div>
-            {this.getOptions()}
-            {this.followUpOptions ? (
-              <div>
-                <div
-                  class="cc-overlay"
-                  onClick={() => {
-                    this.dismissFollowup();
-                  }}
-                />
-                <div class={`menu ${this.position}`}>
-                  <div class="menu-item question-text">
-                    {this.getFollowupQuestionText()}
+          <div class="first-row">
+            <div class="question">{this.question}</div>
+            <div>
+              {this.getOptions()}
+              {this.followUpOptions ? (
+                <div>
+                  <div
+                    class="cc-overlay"
+                    onClick={() => {
+                      this.dismissFollowup();
+                    }}
+                  />
+                  <div class={`menu ${this.position}`}>
+                    <div class="menu-item question-text">
+                      {this.getFollowupQuestionText()}
+                    </div>
+                    {this.followUpOptions.map(x => {
+                      return (
+                        <div
+                          class="menu-item"
+                          onClick={() => this.submitFollowup(x)}
+                        >
+                          {x}
+                        </div>
+                      );
+                    })}
                   </div>
-                  {this.followUpOptions.map(x => {
-                    return (
-                      <div
-                        class="menu-item"
-                        onClick={() => this.submitFollowup(x)}
-                      >
-                        {x}
-                      </div>
-                    );
-                  })}
                 </div>
-              </div>
-            ) : (
-              ""
-            )}
+              ) : (
+                ""
+              )}
+            </div>
           </div>
+          {this.showMultiline ? (
+            <cc-multi-line
+              class="second-row"
+              question={this.getFollowupQuestionText()}
+            ></cc-multi-line>
+          ) : (
+            ""
+          )}
         </div>
       );
     } else if (this.type || (this._surveySettings && this.firstQuestion)) {
@@ -822,6 +855,7 @@ export class Inweb {
     }
     return survey;
   }
+
   getFollowupQuestionText() {
     if (this.followUpQuestions) {
       let question =
@@ -838,6 +872,7 @@ export class Inweb {
       }
     }
   }
+
   render() {
     const survey = this.getSurvey();
 

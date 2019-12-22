@@ -78,6 +78,13 @@ export namespace Components {
     */
     'useToken': boolean;
   }
+  interface CcMultiLine {
+    'placeholder': string;
+    /**
+    * Question to ask the user for open text
+    */
+    'question': string;
+  }
 }
 
 declare global {
@@ -88,8 +95,15 @@ declare global {
     prototype: HTMLCcInwebElement;
     new (): HTMLCcInwebElement;
   };
+
+  interface HTMLCcMultiLineElement extends Components.CcMultiLine, HTMLStencilElement {}
+  var HTMLCcMultiLineElement: {
+    prototype: HTMLCcMultiLineElement;
+    new (): HTMLCcMultiLineElement;
+  };
   interface HTMLElementTagNameMap {
     'cc-inweb': HTMLCcInwebElement;
+    'cc-multi-line': HTMLCcMultiLineElement;
   }
 }
 
@@ -163,9 +177,18 @@ declare namespace LocalJSX {
     */
     'useToken'?: boolean;
   }
+  interface CcMultiLine {
+    'onMultilineAnswered'?: (event: CustomEvent<any>) => void;
+    'placeholder'?: string;
+    /**
+    * Question to ask the user for open text
+    */
+    'question'?: string;
+  }
 
   interface IntrinsicElements {
     'cc-inweb': CcInweb;
+    'cc-multi-line': CcMultiLine;
   }
 }
 
@@ -176,6 +199,7 @@ declare module "@stencil/core" {
   export namespace JSX {
     interface IntrinsicElements {
       'cc-inweb': LocalJSX.CcInweb & JSXBase.HTMLAttributes<HTMLCcInwebElement>;
+      'cc-multi-line': LocalJSX.CcMultiLine & JSXBase.HTMLAttributes<HTMLCcMultiLineElement>;
     }
   }
 }

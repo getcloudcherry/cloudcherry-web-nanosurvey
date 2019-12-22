@@ -106,7 +106,8 @@
       feedback.followUpQuestions = {
         Yes: {
           id: "5c272306c3d98742b0f7d577",
-          multiSelect: ["Content", "Right to the point!"]
+          displayType: "Multiline"
+          // multiSelect: ["Content", "Right to the point!"]
         },
         No: {
           id: "5c272306c3d98742b0f7d578",
@@ -115,6 +116,7 @@
       };
       feedback.position = "below";
       feedback.icons = "hide";
+      feedback.question = "With multiLine";
       document.getElementById("test-id").appendChild(feedback);
     </script>
 
@@ -129,6 +131,10 @@
         No: ["Lengthy", "Does not makes sense"],
         "Option A": ["Lengthy", "Does not makes sense"]
       };
+
+      document.addEventListener("openTextAnswered", event => {
+        console.log(event);
+      });
     </script>
 
     <cc-inweb
@@ -144,5 +150,10 @@
       type="Star-5"
       do-not-post="true"
     ></cc-inweb>
+    <hr />
+    <cc-multi-line
+      style="--cc-inweb-yes-background: #5d78ee; --cc-inweb-yes-color:white"
+      quesiton="Sample input"
+    ></cc-multi-line>
   </body>
 </html>

@@ -12,9 +12,14 @@
 .container {
   width: 100%;
   position: relative;
-  display: flex;
   align-items: center;
-  height: 36px;
+  min-height: 36px;
+  height: auto;
+  .first-row {
+    display: flex;
+    align-items: center;
+    min-height: 36px;
+  }
   .question {
     @extend .text;
   }
