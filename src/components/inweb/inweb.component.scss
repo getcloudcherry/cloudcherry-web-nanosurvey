@@ -196,7 +196,7 @@
       }
       cursor: pointer;
       width: 17px;
-      margin: 0 6px;
+      margin: 0 var(--cc-inweb-icon-margin, 6px);
       &:hover {
         transform: scale(1.1);
       }
@@ -219,5 +219,11 @@
         fill: var(--cc-inweb-no-color, var(--cc-inweb-color, #6a6a6a));
       }
     }
+  }
+}
+
+@media screen and (max-width: 374px) {
+  .container .menu {
+    left: 0 !important;
   }
 }

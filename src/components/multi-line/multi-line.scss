@@ -1,0 +1,32 @@
+.text {
+  font-weight: var(--cc-inweb-font-weight, 400);
+  font-size: var(--cc-inweb-font-size, 15px);
+  font-style: var(--cc-inweb-font-style, italic);
+  color: var(--cc-inweb-color, #6a6a6a);
+}
+
+:host {
+  display: block;
+}
+
+.question-text {
+  @extend .text;
+}
+textarea {
+  width: 70%;
+  height: 64px;
+  border: 1px solid var(--cc-inweb-color, #6a6a6a);
+  margin: 24px 0;
+  padding: 12px;
+  border-radius: 3px;
+}
+
+button {
+  border: none;
+  text-transform: uppercase;
+  background: var(--cc-inweb-yes-background, blue);
+  color: var(--cc-inweb-yes-color, var(--cc-inweb-color, #6a6a6a));
+  height: 48px;
+  padding: 4px 16px;
+  border-radius: 8px;
+}

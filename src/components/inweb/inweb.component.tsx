@@ -808,6 +808,19 @@ export class Inweb {
 
   getSurvey() {
     let survey;
+    var that = this;
+    function handleWindowClicks() {
+      setTimeout(() => {
+        if (that.followUpOptions) {
+          that.dismissFollowup();
+        }
+      }, 100);
+
+      document.body.removeEventListener("click", handleWindowClicks);
+    }
+    if (this.followUpOptions) {
+      document.body.addEventListener("click", handleWindowClicks);
+    }
     if (!this.useToken && !this.type) {
       survey = (
         <div class="container">
