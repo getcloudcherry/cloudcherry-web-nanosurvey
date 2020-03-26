@@ -36,6 +36,19 @@
 | `cc-inweb-response` |             | `CustomEvent<any>` |
 
 
+## Dependencies
+
+### Depends on
+
+- [cc-multi-line](../multi-line)
+
+### Graph
+```mermaid
+graph TD;
+  cc-inweb --> cc-multi-line
+  style cc-inweb fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 *Built with [StencilJS](https://stenciljs.com/)*

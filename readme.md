@@ -190,15 +190,16 @@ A follow up question can have only on condition to it (dependent on primary ques
 
 Use css variables to set custom styles to the component
 
-| Variable name            | Functionality           | Default                        |
-| ------------------------ | :---------------------- | ------------------------------ |
-| `--cc-inweb-color`       | Text color              | #6a6a6a                        |
-| `--cc-inweb-font-weight` | Font Weight             | 400                            |
-| `--cc-inweb-font-size`   | Font Size               | 15px                           |
-| `--cc-inweb-font-style`  | Font Style for text     | italic                         |
-| `--cc-inweb-yes-color`   | Color for Yes icon/text | `--cc-inweb-color` or #6a6a6a  |
-| `--cc-inweb-no-color`    | Color for No icon/text  | `--cc-inweb-color` or #6a6a6a  |
-| `--cc-inweb-icon-size`   | Size of icons           | `--cc-inweb-font-size` or 15px |
+| Variable name            | Functionality           | Default                         |
+| ------------------------ | :---------------------- | ------------------------------- |
+| `--cc-inweb-color`       | Text color              | #6a6a6a                         |
+| `--cc-inweb-font-weight` | Font Weight             | 400                             |
+| `--cc-inweb-font-size`   | Font Size               | 15px                            |
+| `--cc-inweb-font-style`  | Font Style for text     | italic                          |
+| `--cc-inweb-yes-color`   | Color for Yes icon/text | `--cc-inweb-color` or #6a6a6a   |
+| `--cc-inweb-no-color`    | Color for No icon/text  | `--cc-inweb-color` or #6a6a6a   |
+| `--cc-inweb-icon-size`   | Size of icons           | `--cc-inweb-font-size` or 15px  |
+| `--cc-inweb-icon-margin` | margin between icons    | `--cc-inweb-icon-margin` or 6px |
 
 ### Usage
 
@@ -225,3 +226,7 @@ Show followup options above or below the question. By default, opens up above.
 _inweb.position = 'above';
 _inweb.position = 'below';
 ```
+
+## Multiline support
+
+Show followup question with displayType as 'Multiline'
