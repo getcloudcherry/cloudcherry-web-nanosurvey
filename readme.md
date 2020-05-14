@@ -2,7 +2,7 @@
 
 # Inweb Survey
 
-![Cloudcherry brand logo](https://d2o5cklyzmvqdi.cloudfront.net/wp-content/uploads/2019/03/cc-redlogo.png)
+<!-- ![Cloudcherry brand logo](https://d2o5cklyzmvqdi.cloudfront.net/wp-content/uploads/2019/03/cc-redlogo.png) -->
 
 Web component as a channel for CEM for [CloudCherry](https://cloudcherry.com) users. Light weight, deploy and forget tool for online feedback collection.
 
