@@ -29,7 +29,7 @@ To start using this channel within your web application, follow one of below met
 ### Node Modules
 
 - `npm install inweb-survey`
-- Put a script tag similar to this
+- Add a script tag similar to this
   `<script type="module" src='node_modules/inweb-survey/dist/inweb/inweb.esm.js'></script>`
   `<script nomodule src="node_modules/inweb-survey/dist/inweb/inweb.js"></script>`
   in the head of your index.html
@@ -173,7 +173,6 @@ _inweb.followUpQuestions = {
           multiSelect: ["Too Lengthy", "Does not makes sense"]
         }
       };
-_inweb.followUpQuestionId = "5c272306c3d98742b0f7d577";
 ```
 
 ## Use survey configuration from dashboard

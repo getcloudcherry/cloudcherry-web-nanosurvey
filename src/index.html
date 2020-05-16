@@ -19,7 +19,11 @@
       question="How are you feeling today?"
       token="PC-56874"
       question-id="5c272306c3d98742b0f7d577"
-      style="--cc-inweb-color:#e75421;--cc-inweb-font-style:normal;--cc-inweb-font-weight: bold"
+      style="
+        --cc-inweb-color: #e75421;
+        --cc-inweb-font-style: normal;
+        --cc-inweb-font-weight: bold;
+      "
     ></cc-inweb>
     <cc-inweb
       id="widget-library-usability"
@@ -38,16 +42,16 @@
       var customAttributes = {
         prefills: {
           "59f0762ed50981ce6442dab4": "Venki",
-          "5c272306c3d98742b0f7d576": "Widgets"
+          "5c272306c3d98742b0f7d576": "Widgets",
         },
         icons: "hide",
         conditionalThankYou: {
-          yes: "Thank you for your positive feedback",
-          no: "Sorry for the inconvinience"
-        }
+          Yes: "Thank you for your positive feedback",
+          No: "Sorry for the inconvinience",
+        },
       };
 
-      Object.keys(customAttributes).forEach(key => {
+      Object.keys(customAttributes).forEach((key) => {
         inweb1[key] = customAttributes[key];
       });
 
@@ -55,7 +59,7 @@
       var inweb2 = document.querySelector("#widget-library-usability");
       inweb2.prefills = {
         "59f0762ed50981ce6442dab4": "Venki",
-        "5c272306c3d98742b0f7d576": "Widget Library"
+        "5c272306c3d98742b0f7d576": "Widget Library",
       };
       inweb2.hideAfterSubmission = true;
       // Sample usage for channel as hook
@@ -66,7 +70,7 @@
       //  - show follow up on other CC channels like micro-survey/survey/survey-tab
       //  - redirect to documentation for better understanding
       //  - trigger chat via Intercom
-      document.addEventListener("cc-inweb-response", function($event) {
+      document.addEventListener("cc-inweb-response", function ($event) {
         console.log($event, "event");
       });
 
@@ -79,7 +83,7 @@
       token="PC-56874"
       question-id="5c272306c3d98742b0f7d577"
     ></cc-inweb>
-    <div id="test-id" style="margin:20px;padding:20px;">
+    <div id="test-id" style="margin: 20px; padding: 20px;">
       Wikipedia (/ˌwɪkɪˈpiːdiə/ (About this soundlisten), /ˌwɪkiˈpiːdiə/ (About
       this soundlisten) WIK-ih-PEE-dee-ə) is a multilingual online encyclopedia
       with exclusively free content, based on open collaboration through a model
@@ -106,13 +110,13 @@
       feedback.followUpQuestions = {
         Yes: {
           id: "5c272306c3d98742b0f7d577",
-          displayType: "Multiline"
+          displayType: "Multiline",
           // multiSelect: ["Content", "Right to the point!"]
         },
         No: {
           id: "5c272306c3d98742b0f7d578",
-          multiSelect: ["Lengthy", "Does not makes sense"]
-        }
+          multiSelect: ["Lengthy", "Does not makes sense"],
+        },
       };
       feedback.position = "below";
       feedback.icons = "hide";
@@ -129,10 +133,10 @@
       star.followUpQuestions = {
         Yes: ["Content", "Right to the point!"],
         No: ["Lengthy", "Does not makes sense"],
-        "Option A": ["Lengthy", "Does not makes sense"]
+        "Option A": ["Lengthy", "Does not makes sense"],
       };
 
-      document.addEventListener("openTextAnswered", event => {
+      document.addEventListener("openTextAnswered", (event) => {
         console.log(event);
       });
     </script>
@@ -152,7 +156,7 @@
     ></cc-inweb>
     <hr />
     <cc-multi-line
-      style="--cc-inweb-yes-background: #5d78ee; --cc-inweb-yes-color:white"
+      style="--cc-inweb-yes-background: #5d78ee; --cc-inweb-yes-color: white;"
       question="Sample input"
     ></cc-multi-line>
   </body>

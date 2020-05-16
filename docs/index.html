@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script
+      src="https://kit.fontawesome.com/53e6f5a3da.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="../style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,600;1,600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav>
+      <h1>Inweb Survey</h1>
+      <ul>
+        <li>
+          <a
+            target="_blank"
+            href="https://github.com/getcloudcherry/cloudcherry-web-nanosurvey"
+            ><i class="fa fa-github"></i
+          ></a>
+        </li>
+        <li>
+          <a target="_blank" href="http://www.npmjs.com/package/inweb-survey"
+            ><i class="fab fa-npm"></i
+          ></a>
+        </li>
+        <li>
+          <a target="_blank" href="https://cloudcherry.com">Cloudcherry</a>
+        </li>
+      </ul>
+    </nav>
+    <aside>
+      <h3>Table of contents</h3>
+      <ul>
+        <li><a href="#intro">Introduction</a></li>
+        <li><a href="#getting-started">Getting Started</a></li>
+        <li><a href="#style">Customizing Look and Feel</a></li>
+        <li><a href="#prefills">Handling Prefills</a></li>
+        <li><a href="#followup">Follow up questions</a></li>
+        <li><a href="#question-types">Question Types</a></li>
+        <li><a href="#throttling">Throttling</a></li>
+        <!-- <li><a href="#response-collection">Response Collection</a></li> -->
+        <li><a href="#events">Events</a></li>
+        <li><a href="#samples">Live Deployments</a></li>
+        <!-- <li><a href="#partials">Partial Responses</a></li> -->
+
+      </ul>
+    </aside>
+    <article style="position: relative;">
+      <div id="intro" class="sections">
+        <h2>Introduction</h2>
+        <div>
+          <p>
+            Web component as a channel for CEM for
+            <a href="https://cloudcherry.com">Cloudcherry</a> users. Light
+            weight, deploy and forget tool for online feedback collection.
+          </p>
+          <img
+            src="https://cx.getcloudcherry.com/survey-assets/nanosurvey-sample.png"
+            alt="sample image"
+          />
+          <p>
+            Quickly embed the channel to your web page to collect feedback from
+            a touchpoint or on content. Measure quality of your website content
+            or find out what went wrong with online experience. Correlate this
+            data with CEM data from other channels. Take necessary course
+            correction. Delight your customers.
+          </p>
+          <p>
+            Reach out to
+            <a href="mailto:mailto:support@getcloudcherry.com"
+              >support@getcloudcherry.com</a
+            >
+            to deploy this channel in bulk for your brand.
+          </p>
+        </div>
+      </div>
+      <div id="getting-started" class="getting-started">
+        <h2>Getting Started</h2>
+        <div>
+          <p>
+            To start using this channel within your web application, follow one
+            of below methods.
+          </p>
+          <h4>Script Tag</h4>
+          <p>Add following script tags in the head of your index.html</p>
+          <script src="https://gist.github.com/venkateshwarv/3e56da50f4495663c11c3956f74dfd3f.js"></script>
+          <p>
+            Then you can use the element anywhere in your template, JSX, html
+            etc.
+          </p>
+          <h4>Node Modules</h4>
+          <p>
+             Run <pre>npm install inweb-survey</pre>
+        </p>
+            <p>Add a script tag similar to this in the head of your index.html</p>
+            <script src="https://gist.github.com/venkateshwarv/4d5bfbde96f89b1d0484029a97b55666.js"></script>
+            <p>Then you can use the element anywhere in your template, JSX, html etc.</p>
+            <h4>Using the component</h4>
+            <script src="https://gist.github.com/venkateshwarv/0d3201a0a88a642f74af5f9349b67f37.js"></script>
+            <p><b>question</b> will be shown to user with thumbs up and down<br>
+                <b>token</b> - survey token from CloudCherry CEM platform<br>
+                <b>question-id</b> - id of the question from CloudCherry CEM platform
+            </p>
+        </div>
+      </div>
+      <div id="style" class="sections">
+        <h2>Customizing Look And feel</h2>
+
+        <h4>Use CSS variables to customize the survey widget to your brand</h4>
+        <p>Use css variables to set custom styles to the component</p>
+
+<table>
+<tr>
+
+    <th>Variable name</th><th>Functionality</th><th>Default</th>
+    
+</tr>
+<tr>
+    <td>--cc-inweb-color</td><td>Text color</td><td>#6a6a6a</td>
+</tr>
+<tr>
+    <td>--cc-inweb-font-weight</td>
+    <td>Font Weight</td>
+    <td>400</td>
+</tr>
+    <tr>
+    <td>--cc-inweb-font-size</td>
+    <td>Font Size</td>
+    <td>15px</td>
+</tr>
+<tr>
+    <td>--cc-inweb-font-style</td>
+    <td> Font Style for text</td>
+    <td>italic</td>
+</tr>
+<tr>
+    <td>--cc-inweb-yes-color</td>
+    <td>Color for Yes icon/text</td>
+    <td>`--cc-inweb-color` or #6a6a6a</td>
+</tr>
+<tr>
+    <td>--cc-inweb-no-color</td>
+    <td>Color for No icon/text</td>
+    <td>`--cc-inweb-color` or #6a6a6a</td>
+</tr>
+<tr>
+    <td>--cc-inweb-icon-size</td>
+    <td>Size of icons</td>
+    <td>`--cc-inweb-font-size` or 15px</td>
+</tr>
+<tr>
+    <td>--cc-inweb-icon-margin</td>
+    <td>margin between icons</td>
+    <td> `--cc-inweb-icon-margin` or 6px</td>
+</tr>
+</table>
+        <div>
+            <h4>Conditional Thank you text</h4>
+          <p>Show different thank you texts based on user's response. Below script sets the property to the already added component</p>
+        <iframe src="https://stackblitz.com/edit/js-jaqx3b?embed=1&file=index.js"></iframe>
+        </div>
+        <h4>Hide Icons</h4>
+        <p>Not fond of thumbs? you can now show plain text instead of icons. Set the property 'icons' to 'hide'. This can be set in the html as property or set via Javascript</p>
+        <iframe src="https://stackblitz.com/edit/js-5226md?embed=1&file=index.js" frameborder="0"></iframe>
+    </div>
+      <div id="prefills" class="sections">
+        <h2>Handling Prefills</h2>
+        <div>
+          <p>Prefills are additional information that gets recorded along with users response. For instance, CUSTOMER ID, CAMPAIGN NAME, can be few examples.</p>
+          <p> It is a dictionary with keys as question ids from CloudCherry CEM Platform and values are the prefill answers</p>
+          <iframe src="https://stackblitz.com/edit/js-8tqdwv?embed=1&file=index.js&view=preview"></iframe>
+        </div>
+      </div>
+      <div id="followup" class="sections">
+        <h2>Follow Up Questions</h2>
+        <div>
+          <p>You can show follow up options from each answer. This will show up once user answers a question. Add a followup question to post the response to.</p>
+          <iframe src="https://stackblitz.com/edit/js-2dwrkj?embed=1&file=index.js" frameborder="0"></iframe>
+          <br>
+          <p>If you need these options to be recorded as two different questions, use the following syntax.</p>
+            <iframe src="https://stackblitz.com/edit/js-snyweh?embed=1&file=index.js" frameborder="0"></iframe>
+        </div>
+      </div>
+      <div id="question-types" class="sections">
+        <h2>Question Types</h2>
+        <div>
+            <p>You can use the survey configuration from the CloudCherry dashboard. It will pick the first question (primary) that is supported and render it inline."Star-5", "Smile-5", "Select".
+                Any following Single Select question with tag 'follow-up' will be take as follow up question. You can configure the conditions in the platform to show different followup options.
+                A follow up question can have only on condition to it (dependent on primary question). You will also be able to take advantage of partial submission (if enabled from dashboard).</p>
+            <iframe src="https://stackblitz.com/edit/js-fzheob?embed=1&file=index.html" frameborder="0"></iframe>
+        </div>
+      </div>
+      <div id="throttling" class="sections">
+        <h2>Throttling</h2>
+        <div>
+            <h4>Cookie ID</h4>
+            <p>You can set different cookie property for the component to use. Set in html using 'cookie-id' attribute or use the property 'cookieId' in JS</p>
+            <script src="https://gist.github.com/venkateshwarv/e606ff5d586cb4339b37722eefe2c637.js"></script>
+            <br>
+            <h4>Survey Throttle Duration</h4>
+            <p>Surveys are throttled by 3 days by default. You can set the attribute 'throttle-for-days' in html or set in Javascript using 'throttleForDays'</p>
+            <script src="https://gist.github.com/venkateshwarv/9bcda3a685dc1edab6073b484bee991b.js"></script>
+            <br>
+            <h4>Hide After Submission</h4>
+            <p>While throttling, you can choose to show the survey or hide it</p>
+            <script src="https://gist.github.com/venkateshwarv/58105049d314c9825437d3a5b997a19e.js"></script>
+        </div>
+      </div>
+      <!-- <div id="response-collection" class="sections">
+        <h2>Response Collection</h2>
+        <div>
+          <p>Responses collected can be found under 'Responses' section of Cloudcherry Dashboard.</p>
+        </div>
+      </div> -->
+      <div id="events" class="sections">
+        <h2>Events</h2>
+        <div>
+          <p>Every interaction to the component will emit an event on submission. Listen for <b>cc-inweb-response</b> event on the document as shown below</p>
+
+          <script src="https://gist.github.com/venkateshwarv/5ec30c258a5bf46756e305c49d9a4501.js"></script>
+            
+            <pre>$event.detail</pre> has the following payload
+            <ul>
+                <li><b>question</b> has the current question shown to us</li>
+                <li><b>response</b> is the user's choice of the answer. It would be 'true' or 'false'</li>
+                <li><b>prefills</b> prefills that was submitted along with response</li>
+                <li><b>responseAsAnswer</b> response as an answer format suitable for Cloudcherry CEM platform</li>
+            </ul>
+            </p>
+        </div>
+      </div>
+      <!-- <div id="partials" class="sections">
+        <h2>Partial Responses</h2>
+        <div>
+          <p></p>
+        </div>
+      </div> -->
+      <div id="samples" class="sections">
+          <h2>Live Deployments</h2>
+            <h4>Netmeds.com (Blogs & FAQ pages)</h4>
+          <p>
+           Explore our sample deployement in <a target="_blank" href="https://www.netmeds.com/health-library/post/5-foods-incredibly-rich-in-copper-that-enhances-overall-wellbeing-infographic">Blog pages</a> of Netmeds. Observe the widget under 'Contact Details' floating section. This was a one line bulk deployment facilitated by CloudCherry Support Team.
+       </p>
+      </div>
+    </article>
+  </body>
+</html>
